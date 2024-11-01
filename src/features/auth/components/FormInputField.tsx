@@ -22,13 +22,14 @@ const FormInputField = ({
   label,
   type,
   isError,
+  ...rest
 }: FormInputFieldProps) => {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem {...rest}>
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <Input
