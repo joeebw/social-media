@@ -1,10 +1,8 @@
 import * as z from "zod";
-import { useForm, FieldErrors } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldErrors } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import FormInputField from "@/features/auth/components/FormInputField";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import clsx from "clsx";
 import ImageDropzone from "./ImageDropzone";
 import {
@@ -12,89 +10,15 @@ import {
   SIGNUP_FIELDS,
 } from "@/features/auth/constants/formFields";
 import useAppStore from "@/state/useStore";
+import { registerSchema } from "@/features/auth/hooks/useHandleLogin";
+import useAuth from "@/features/auth/hooks/useHandleLogin";
 
-const loginSchema = z.object({
-  email: z.string().email("Invalid email"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-});
-
-const registerSchema = z.object({
-  email: z.string().email("Invalid email"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(
-      /[!@#$%^&*(),.?":{}|<>]/,
-      "Password must contain at least one special character"
-    ),
-  profilePicture: z
-    .instanceof(File, { message: "Profile picture is required" })
-    .refine((file) => file !== undefined, "Profile picture is required"),
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  location: z.string().min(1, "Location is required"),
-  occupation: z.string().min(1, "Occupation is required"),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
 export type RegisterFormValues = z.infer<typeof registerSchema>;
-
-type FormValues = LoginFormValues | RegisterFormValues;
-
-const signInDefaultValues = {
-  email: "",
-  password: "",
-};
-
-const signUpDefaultValues = {
-  email: "",
-  password: "",
-  profilePicture: null as unknown as File,
-  firstName: "",
-  lastName: "",
-  location: "",
-  occupation: "",
-};
 
 const LoginForm = () => {
   const isSignIn = useAppStore((state) => state.isSignIn);
   const toggleSignIn = useAppStore((state) => state.toggleSignIn);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(isSignIn ? loginSchema : registerSchema),
-    defaultValues: isSignIn ? signInDefaultValues : signUpDefaultValues,
-    mode: "onBlur",
-  });
-
-  const handleFileSelect = (file: File | null) => {
-    setSelectedFile(file);
-    if (file) {
-      form.setValue("profilePicture", file, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    }
-  };
-
-  const handleSubmit = async (data: LoginFormValues | RegisterFormValues) => {
-    if (isSignIn) {
-      const loginData = data as LoginFormValues;
-      console.log("Login:", loginData);
-    } else {
-      const registerData = data as RegisterFormValues;
-      console.log("Register:", registerData);
-    }
-  };
-
-  useEffect(() => {
-    if (isSignIn) {
-      form.reset(signInDefaultValues);
-    } else {
-      form.reset(signUpDefaultValues);
-      setSelectedFile(null);
-    }
-  }, [isSignIn, form]);
+  const { form, handleFileSelect, handleSubmit, selectedFile } = useAuth();
 
   return (
     <div className="w-full sm:w-[47rem] rounded-lg shadow-md p-9 bg-secondaryBackground">

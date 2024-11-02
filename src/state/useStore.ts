@@ -3,11 +3,14 @@ import { persist, createJSONStorage } from "zustand/middleware";
 
 interface SocialMediaState {
   isSignIn: boolean;
+  idUser: string | null;
   toggleSignIn: () => void;
+  setIdUser: (id: string | null) => void;
 }
 
 const initialState = {
   isSignIn: true,
+  idUser: null,
 };
 
 const createActions: StateCreator<SocialMediaState, [], []> = (set) => ({
@@ -16,6 +19,7 @@ const createActions: StateCreator<SocialMediaState, [], []> = (set) => ({
     set((state) => {
       return { isSignIn: !state.isSignIn };
     }),
+  setIdUser: (id: string | null) => () => ({ idUser: id }),
 });
 
 const useAppStore = create<SocialMediaState>()(
