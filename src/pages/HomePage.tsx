@@ -1,13 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { logoutUser } from "@/utils/firebase";
+import NavBar from "@/features/navBar/components/NavBar";
 
 const HomePage = () => {
   return (
-    <div>
-      <h1>HomePage</h1>
-      <Button onClick={logoutUser} variant={"default"}>
-        Logout
-      </Button>
+    <div className="w-full h-screen">
+      <NavBar />
     </div>
   );
 };

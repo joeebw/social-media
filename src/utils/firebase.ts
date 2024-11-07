@@ -4,14 +4,23 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  setDoc,
+} from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 import { UserData } from "@/ts/firebase.types";
 import axios from "axios";
 import { toast } from "sonner";
 import { UseFormReturn } from "react-hook-form";
 import { FormValues } from "@/features/auth/hooks/useHandleLogin";
+import { RespFetchUserList } from "@/features/navBar/ts/navBar.types";
+import { User } from "@/state/userStore.type";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -79,7 +88,6 @@ export const registerUserWithImage = async (userData: UserData, file: File) => {
     console.log(
       "User registered with image and related contacts collection created 🚀"
     );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("Error registering user or uploading image:", error);
     const errorCode = error?.code;
@@ -141,6 +149,7 @@ export const loginUser = async (
       default:
         toast.error("Login error: " + error.message);
     }
+    throw error;
   }
 };
 
@@ -150,5 +159,40 @@ export const logoutUser = async () => {
     console.log("User logged out");
   } catch (error) {
     console.error("Error logging out:", error);
+  }
+};
+
+export const fetchUserById = async (id: string) => {
+  try {
+    const userDocRef = doc(db, "usersWolfstream", id);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      const user: unknown = { id: userDoc.id, ...userDoc.data() };
+      return user as User;
+    } else {
+      console.log("No such document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user document:", error);
+    throw error;
+  }
+};
+
+export const fetchUserList = async () => {
+  try {
+    const usersCollection = collection(db, "usersWolfstream");
+    const querySnapshot = await getDocs(usersCollection);
+
+    const users = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return users as RespFetchUserList;
+  } catch (error) {
+    console.error("Error fetching users list:", error);
+    throw error;
   }
 };

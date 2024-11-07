@@ -7,6 +7,7 @@ import { RegisterFormValues } from "../components/LoginForm/LoginForm";
 import { z } from "zod";
 import useAppStore from "@/state/useStore";
 import { loginUser as loginUserWithEmail } from "@/utils/firebase";
+import { useNavigate } from "react-router-dom";
 
 const passwordSchema = z
   .string()
@@ -67,6 +68,7 @@ const signUpDefaultValues = {
 const useAuth = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const isSignIn = useAppStore((state) => state.isSignIn);
+  const navigate = useNavigate();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(isSignIn ? loginSchema : registerSchema),
@@ -97,7 +99,12 @@ const useAuth = () => {
   };
 
   const loginUser = async (data: LoginFormValues) => {
-    await loginUserWithEmail(data.email, data.password, form);
+    try {
+      await loginUserWithEmail(data.email, data.password, form);
+      navigate("/home");
+    } catch (error) {
+      console.error("Error in login user");
+    }
   };
 
   const handleSubmit = async (data: LoginFormValues | RegisterFormValues) => {
