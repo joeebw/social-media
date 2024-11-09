@@ -1,5 +1,5 @@
 import { fetchUserById, fetchUserList } from "@/utils/firebase";
-import { Users } from "../ts/navBar.types";
+import { Users } from "@/ts/user.types";
 
 const USERS = [
   {

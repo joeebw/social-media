@@ -4,12 +4,13 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IconContext } from "react-icons/lib";
 import { IoSearch } from "react-icons/io5";
-import { Users } from "../ts/navBar.types";
+import { Users } from "@/ts/user.types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import clsx from "clsx";
 import useFetchUsers from "../hooks/useFetchUsers";
 import { BeatLoader } from "react-spinners";
 import { Skeleton } from "@/components/ui/skeleton";
+import AvatarProfile from "@/components/AvatarProfile";
 
 const UserSearchInput = () => {
   const { data: users, isLoading } = useFetchUsers();
@@ -125,7 +126,7 @@ const UserSearchInput = () => {
         </IconContext.Provider>
 
         {showUserCards && (
-          <Card className="absolute top-11 max-h-[20rem] w-96 shadow-lg bg-secondaryBackground">
+          <Card className="absolute top-11 max-h-[20rem] w-96 shadow-lg bg-secondaryBackground z-20">
             <CardHeader>
               <CardTitle>Filtered Users</CardTitle>
             </CardHeader>
@@ -146,15 +147,11 @@ const UserSearchInput = () => {
                         )}
                         onClick={() => handleUserSelect(user)}
                       >
-                        <Avatar>
-                          <AvatarImage
-                            src={user.profilePicture}
-                            alt={user.name}
-                          />
-                          <AvatarFallback>
-                            <Skeleton className="h-[125px] w-[250px] rounded-xl bg-gray-400" />
-                          </AvatarFallback>
-                        </Avatar>
+                        <AvatarProfile
+                          profilePicture={user.profilePicture}
+                          alt={user.name}
+                        />
+
                         <div>
                           <h4 className="font-medium">{user.name}</h4>
                           <p className="text-gray-500">{user.email}</p>

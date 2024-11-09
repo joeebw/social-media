@@ -4,7 +4,7 @@ import { Form } from "@/components/ui/form";
 import FormInputField from "@/features/auth/components/FormInputField";
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
-import ImageDropzone from "./ImageDropzone";
+import ImageDropzone from "@/components/ImageDropzone";
 import {
   SIGNIN_FIELDS,
   SIGNUP_FIELDS,
@@ -71,14 +71,17 @@ const LoginForm = () => {
             ))}
 
           {!isSignIn && (
-            <ImageDropzone
-              onFileSelect={handleFileSelect}
-              selectedFile={selectedFile}
-              error={
-                (form.formState.errors as FieldErrors<RegisterFormValues>)
-                  .profilePicture
-              }
-            />
+            <div className="col-span-2">
+              <ImageDropzone
+                dropzoneText="Drag and drop a profile picture, or click to select"
+                onFileSelect={handleFileSelect}
+                selectedFile={selectedFile}
+                error={
+                  (form.formState.errors as FieldErrors<RegisterFormValues>)
+                    .profilePicture
+                }
+              />
+            </div>
           )}
 
           <Button

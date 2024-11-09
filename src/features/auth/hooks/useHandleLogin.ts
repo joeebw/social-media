@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { registerUserWithImage } from "@/utils/firebase";
-import { UserData } from "@/ts/firebase.types";
+import { UserDataRegister } from "@/ts/firebase.types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterFormValues } from "../components/LoginForm/LoginForm";
@@ -87,7 +87,7 @@ const useAuth = () => {
   };
 
   const registerUser = async (data: RegisterFormValues) => {
-    const userData: UserData = {
+    const userData: UserDataRegister = {
       email: data.email,
       password: data.password,
       firstName: data.firstName,

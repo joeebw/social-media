@@ -5,22 +5,26 @@ import {
   signOut,
 } from "firebase/auth";
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
   getDocs,
   getFirestore,
+  query,
   setDoc,
+  where,
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { initializeApp } from "firebase/app";
-import { UserData } from "@/ts/firebase.types";
+import { UserDataRegister } from "@/ts/firebase.types";
 import axios from "axios";
 import { toast } from "sonner";
 import { UseFormReturn } from "react-hook-form";
 import { FormValues } from "@/features/auth/hooks/useHandleLogin";
-import { RespFetchUserList } from "@/features/navBar/ts/navBar.types";
+import { RespFetchUserList } from "@/ts/firebase.types";
 import { User } from "@/state/userStore.type";
+import { CreatePost, Post } from "@/ts/post.types";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -61,7 +65,10 @@ const uploadToImgBB = async (file: File) => {
   }
 };
 
-export const registerUserWithImage = async (userData: UserData, file: File) => {
+export const registerUserWithImage = async (
+  userData: UserDataRegister,
+  file: File
+) => {
   try {
     const { email, password, firstName, lastName, location, occupation } =
       userData;
@@ -107,6 +114,44 @@ export const registerUserWithImage = async (userData: UserData, file: File) => {
       default:
         toast.error("Error registering user: " + error.message);
     }
+  }
+};
+
+export const createPost = async (postData: CreatePost) => {
+  try {
+    const {
+      file,
+      userId,
+      profielPicture,
+      firstName,
+      lastName,
+      location,
+      description,
+    } = postData;
+
+    let imageURL: string | null = null;
+
+    if (file) {
+      imageURL = await uploadToImgBB(file);
+    }
+
+    await addDoc(collection(db, "postsWolfstream"), {
+      userId: userId,
+      firstName: firstName,
+      lastName: lastName,
+      location: location,
+      description: description,
+      userPicturePath: profielPicture,
+      picturePath: imageURL,
+      likes: [],
+      comments: [],
+      datePost: Date.now(),
+    });
+    console.log("post created 📄");
+  } catch (error) {
+    console.error(error);
+    toast.error("The post cannot be created, please try again.");
+    throw error;
   }
 };
 
@@ -193,6 +238,43 @@ export const fetchUserList = async () => {
     return users as RespFetchUserList;
   } catch (error) {
     console.error("Error fetching users list:", error);
+    throw error;
+  }
+};
+
+export const fetchUserPosts = async (userId: string) => {
+  try {
+    const q = query(
+      collection(db, "postsWolfstream"),
+      where("userId", "==", userId)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const posts: Post[] = [];
+
+    querySnapshot.forEach((doc) => {
+      posts.push({ ...doc.data() } as Post);
+    });
+
+    return posts;
+  } catch (error) {
+    console.error("Error getting posts:", error);
+    throw error;
+  }
+};
+
+export const fetchAllPosts = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, "postsWolfstream"));
+    const posts: Post[] = [];
+
+    querySnapshot.forEach((doc) => {
+      posts.push({ ...doc.data() } as Post);
+    });
+
+    return posts;
+  } catch (error) {
+    console.error("Error getting posts:", error);
     throw error;
   }
 };

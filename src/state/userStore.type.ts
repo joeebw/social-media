@@ -4,4 +4,5 @@ export type User = {
   lastName: string;
   location: string;
   occupation: string;
+  profilePicture: string;
 };
