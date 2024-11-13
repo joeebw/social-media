@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { FieldErrors } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import FormInputField from "@/features/auth/components/FormInputField";
+import FormInputField from "@/components/FormInputField";
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import ImageDropzone from "@/components/ImageDropzone";

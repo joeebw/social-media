@@ -1,7 +1,9 @@
+import { Comment } from "@/features/posts/ts/post.types";
+
 export type CreatePost = {
   file: File | null;
   userId: string;
-  profielPicture: string;
+  profielPicture: string | undefined;
   firstName: string;
   lastName: string;
   location: string;
@@ -9,7 +11,8 @@ export type CreatePost = {
 };
 
 export type Post = {
-  comments: string[];
+  id: string;
+  comments: Comment[];
   datePost: number;
   description: string;
   firstName: string;
@@ -19,4 +22,5 @@ export type Post = {
   picturePath: string;
   userId: string;
   userPicturePath: string;
+  pictureId: string;
 };

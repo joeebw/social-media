@@ -7,12 +7,14 @@ import {
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
   getFirestore,
   query,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -25,6 +27,7 @@ import { FormValues } from "@/features/auth/hooks/useHandleLogin";
 import { RespFetchUserList } from "@/ts/firebase.types";
 import { User } from "@/state/userStore.type";
 import { CreatePost, Post } from "@/ts/post.types";
+import { Comment } from "@/features/posts/ts/post.types";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -58,7 +61,10 @@ const uploadToImgBB = async (file: File) => {
         },
       }
     );
-    return data.data.url;
+    return {
+      url: data.data.url,
+      id: data.data.id,
+    };
   } catch (error) {
     console.error("Error uploading image to ImgBB:", error);
     throw error;
@@ -129,10 +135,10 @@ export const createPost = async (postData: CreatePost) => {
       description,
     } = postData;
 
-    let imageURL: string | null = null;
+    let image: { url: string; id: string } | null = null;
 
     if (file) {
-      imageURL = await uploadToImgBB(file);
+      image = await uploadToImgBB(file);
     }
 
     await addDoc(collection(db, "postsWolfstream"), {
@@ -142,7 +148,8 @@ export const createPost = async (postData: CreatePost) => {
       location: location,
       description: description,
       userPicturePath: profielPicture,
-      picturePath: imageURL,
+      picturePath: image?.url ?? "",
+      pictureId: image?.id ?? "",
       likes: [],
       comments: [],
       datePost: Date.now(),
@@ -269,12 +276,43 @@ export const fetchAllPosts = async () => {
     const posts: Post[] = [];
 
     querySnapshot.forEach((doc) => {
-      posts.push({ ...doc.data() } as Post);
+      posts.push({
+        id: doc.id,
+        ...doc.data(),
+      } as Post);
     });
 
     return posts;
   } catch (error) {
     console.error("Error getting posts:", error);
+    throw error;
+  }
+};
+
+export const deletePostAndImage = async (postId: string) => {
+  try {
+    const postRef = doc(db, "postsWolfstream", postId);
+    await deleteDoc(postRef);
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    throw error;
+  }
+};
+
+export const updatePostComments = async (
+  postId: string,
+  newComments: Comment[]
+) => {
+  try {
+    const postRef = doc(db, "postsWolfstream", postId);
+
+    await updateDoc(postRef, {
+      comments: newComments,
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error updating comments:", error);
     throw error;
   }
 };

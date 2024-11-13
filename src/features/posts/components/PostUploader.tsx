@@ -26,6 +26,7 @@ import { createPost } from "@/utils/firebase";
 import { CreatePost } from "@/ts/post.types";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ICONS_UPLOADER = [
   {
@@ -78,6 +79,7 @@ type FormValues = z.infer<typeof postSchema>;
 const PostUploader = () => {
   const [isUploadImage, setIsUploadImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const queryClient = useQueryClient();
   const userData = useAppStore((state) => state.user);
   const userId = useAppStore((state) => state.idUser);
 
@@ -105,12 +107,14 @@ const PostUploader = () => {
         firstName: userData!.firstName,
         lastName: userData!.lastName,
         location: userData!.location,
-        profielPicture: userData!.profilePicture,
+        profielPicture: userData?.profilePicture,
         file: data.image,
         description: data.text,
       };
-      // await createPost(dataPost);
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await createPost(dataPost);
+      // await new Promise((resolve) => setTimeout(resolve, 5000));
+
+      queryClient.invalidateQueries({ queryKey: ["home posts"] });
       toast.success("Your post has been successfully uploaded!");
     } catch (error) {
       console.error("error submit");

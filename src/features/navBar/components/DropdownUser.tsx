@@ -11,23 +11,28 @@ import { logoutUser } from "@/utils/firebase";
 
 const DropdownUser = () => {
   const userData = useAppStore((state) => state.user);
+  const resetAppStore = useAppStore((state) => state.resetAppStore);
   const name = userData ? `${userData.firstName} ${userData.lastName}` : "";
 
   const handleLogout = () => {
+    resetAppStore();
     logoutUser();
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="bg-gray-300 min-w-[5rem] font-normal rounded-md">
+        <Button
+          variant="outline"
+          className="min-w-[5rem] font-normal rounded-md bg-gray-200"
+        >
           {name}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-white">
         <DropdownMenuGroup>
           <DropdownMenuItem
-            className="font-medium cursor-pointer hover:bg-red-300"
+            className="font-medium focus:bg-red-300"
             onClick={handleLogout}
           >
             Logout

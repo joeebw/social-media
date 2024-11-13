@@ -9,6 +9,7 @@ interface SocialMediaState {
   toggleSignIn: () => void;
   setUser: (user: User | null) => void;
   setIdUser: (id: string | null) => void;
+  resetAppStore: () => void;
 }
 
 const initialState = {
@@ -29,6 +30,7 @@ const createActions: StateCreator<SocialMediaState, [], []> = (set) => ({
   setIdUser: (id: string | null) => {
     set(() => ({ idUser: id }));
   },
+  resetAppStore: () => set(() => initialState),
 });
 
 const useAppStore = create<SocialMediaState>()(
