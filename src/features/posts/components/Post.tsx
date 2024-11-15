@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Post as PostType } from "@/ts/post.types";
 import timeAgo from "@/utils/timeAgo";
-import { Heart, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -19,6 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import usePostActions from "../hooks/usePostActions";
 import ImageWithSkeleton from "@/components/ImageWithSkeleton";
 import useAppStore from "@/state/useStore";
+import LikesPost from "./LikesPost";
 
 type Props = {
   postItem: PostType;
@@ -44,6 +45,7 @@ const Post = ({ postItem }: Props) => {
     picturePath,
     userPicturePath,
     comments,
+    likes,
     userId: userPostId,
   } = postItem;
   const [isOpenComments, setIsOpenComments] = useState(false);
@@ -101,14 +103,8 @@ const Post = ({ postItem }: Props) => {
       </CardContent>
       <CardFooter className="block">
         <div className="flex items-center gap-7">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex items-center gap-2 hover:bg-gray-200"
-          >
-            <Heart className="w-5 h-5" />
-            <span>15 likes</span>
-          </Button>
+          <LikesPost likes={likes} postId={postItem.id} />
+
           <Button
             variant="ghost"
             size="sm"
@@ -157,22 +153,25 @@ const Post = ({ postItem }: Props) => {
               </form>
 
               <Separator className="mt-4 mb-1" />
-              {comments.map((comment) => (
-                <>
-                  <div className="flex items-center justify-between">
-                    <p className="pl-4">{comment.text}</p>
-                    <Button variant="ghost" size="icon">
-                      <DropdownDelete
-                        isLoading={false}
-                        onDelete={() =>
-                          handleDeleteComment(comment.id, postItem.id)
-                        }
-                      />
-                    </Button>
+
+              <div className="overflow-y-auto max-h-[200px]">
+                {comments.map((comment) => (
+                  <div key={comment.id}>
+                    <div className="flex items-center justify-between">
+                      <p className="pl-4">{comment.text}</p>
+                      <Button variant="ghost" size="icon">
+                        <DropdownDelete
+                          isLoading={false}
+                          onDelete={() =>
+                            handleDeleteComment(comment.id, postItem.id)
+                          }
+                        />
+                      </Button>
+                    </div>
+                    {comments.length > 1 && <Separator className="my-1" />}
                   </div>
-                  <Separator className="my-1" />
-                </>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         )}

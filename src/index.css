@@ -102,3 +102,36 @@ body {
 #root {
   font-family: "Roboto", sans-serif;
 }
+
+/* Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+*:hover {
+  scrollbar-color: rgba(80, 212, 242, 0.656) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 20px;
+  border: transparent;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(80, 212, 242, 0.656);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(80, 212, 242, 0.656);
+}

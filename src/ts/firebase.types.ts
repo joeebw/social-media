@@ -6,11 +6,3 @@ export interface UserDataRegister {
   location: string;
   occupation: string;
 }
-
-export type RespFetchUserList = {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  profilePicture: string;
-}[];

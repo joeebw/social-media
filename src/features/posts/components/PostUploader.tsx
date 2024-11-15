@@ -79,7 +79,6 @@ type FormValues = z.infer<typeof postSchema>;
 const PostUploader = () => {
   const [isUploadImage, setIsUploadImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const queryClient = useQueryClient();
   const userData = useAppStore((state) => state.user);
   const userId = useAppStore((state) => state.idUser);
 
@@ -107,14 +106,13 @@ const PostUploader = () => {
         firstName: userData!.firstName,
         lastName: userData!.lastName,
         location: userData!.location,
-        profielPicture: userData?.profilePicture,
+        profielPicture: userData?.profilePicture.url,
         file: data.image,
         description: data.text,
       };
       await createPost(dataPost);
       // await new Promise((resolve) => setTimeout(resolve, 5000));
 
-      queryClient.invalidateQueries({ queryKey: ["home posts"] });
       toast.success("Your post has been successfully uploaded!");
     } catch (error) {
       console.error("error submit");
@@ -150,7 +148,7 @@ const PostUploader = () => {
             <div className="flex items-center gap-5">
               <AvatarProfile
                 className="w-[3.5rem] h-[3.5rem]"
-                profilePicture={userData?.profilePicture}
+                profilePicture={userData?.profilePicture.url}
                 alt="profile picture"
               />
 
@@ -205,6 +203,7 @@ const PostUploader = () => {
                       "cursor-pointer text-gray-500 rounded-md hover:bg-gray-200"
                     )}
                     onClick={() => setIsUploadImage(true)}
+                    key={name}
                   >
                     {icon}
                     {name}
@@ -215,6 +214,7 @@ const PostUploader = () => {
                       "flex items-center gap-2 p-2 font-medium transition",
                       "text-gray-400 cursor-not-allowed"
                     )}
+                    key={name}
                   >
                     {icon}
                     {name}

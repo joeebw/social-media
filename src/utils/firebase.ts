@@ -12,6 +12,7 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  onSnapshot,
   query,
   setDoc,
   updateDoc,
@@ -24,7 +25,6 @@ import axios from "axios";
 import { toast } from "sonner";
 import { UseFormReturn } from "react-hook-form";
 import { FormValues } from "@/features/auth/hooks/useHandleLogin";
-import { RespFetchUserList } from "@/ts/firebase.types";
 import { User } from "@/state/userStore.type";
 import { CreatePost, Post } from "@/ts/post.types";
 import { Comment } from "@/features/posts/ts/post.types";
@@ -90,12 +90,14 @@ export const registerUserWithImage = async (
     const uid = user.uid;
 
     await setDoc(doc(db, "usersWolfstream", uid), {
+      id: uid,
       email: user.email,
       firstName,
       lastName,
       location,
       occupation,
       profilePicture: imageURL,
+      friends: [],
     });
 
     console.log(
@@ -232,6 +234,24 @@ export const fetchUserById = async (id: string) => {
   }
 };
 
+export const updateUserFriends = async (
+  userId: string,
+  newFriendList: string[]
+) => {
+  try {
+    const userRef = doc(db, "usersWolfstream", userId);
+
+    await updateDoc(userRef, {
+      friends: newFriendList,
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error updating comments:", error);
+    throw error;
+  }
+};
+
 export const fetchUserList = async () => {
   try {
     const usersCollection = collection(db, "usersWolfstream");
@@ -242,7 +262,7 @@ export const fetchUserList = async () => {
       ...doc.data(),
     }));
 
-    return users as RespFetchUserList;
+    return users as User[];
   } catch (error) {
     console.error("Error fetching users list:", error);
     throw error;
@@ -289,6 +309,35 @@ export const fetchAllPosts = async () => {
   }
 };
 
+export const subscribeToAllPosts = (
+  onUpdate: (posts: Post[]) => void
+): (() => void) => {
+  console.log("Iniciando suscripción a posts");
+
+  const unsubscribe = onSnapshot(
+    collection(db, "postsWolfstream"),
+    {
+      includeMetadataChanges: true,
+    },
+    (snapshot) => {
+      console.log("Change detected in posts");
+      const posts: Post[] = [];
+      snapshot.forEach((doc) => {
+        posts.push({
+          id: doc.id,
+          ...doc.data(),
+        } as Post);
+      });
+      onUpdate(posts);
+    },
+    (error) => {
+      console.error("Error in suscription:", error);
+    }
+  );
+
+  return unsubscribe;
+};
+
 export const deletePostAndImage = async (postId: string) => {
   try {
     const postRef = doc(db, "postsWolfstream", postId);
@@ -313,6 +362,39 @@ export const updatePostComments = async (
     return true;
   } catch (error) {
     console.error("Error updating comments:", error);
+    throw error;
+  }
+};
+
+export const updatePostLikes = async (postId: string, likes: string[]) => {
+  try {
+    const postRef = doc(db, "postsWolfstream", postId);
+
+    await updateDoc(postRef, {
+      likes: likes,
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error updating likes:", error);
+    throw error;
+  }
+};
+
+export const updateFriendList = async (
+  userId: string,
+  newFriendList: string[]
+) => {
+  try {
+    const postRef = doc(db, "usersWolfstream", userId);
+
+    await updateDoc(postRef, {
+      friends: newFriendList,
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error updating friend list:", error);
     throw error;
   }
 };

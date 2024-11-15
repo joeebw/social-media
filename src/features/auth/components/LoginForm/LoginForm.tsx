@@ -12,6 +12,7 @@ import {
 import useAppStore from "@/state/useStore";
 import { registerSchema } from "@/features/auth/hooks/useHandleLogin";
 import useAuth from "@/features/auth/hooks/useHandleLogin";
+import LoadingButton from "@/components/LoadingButton";
 
 export type RegisterFormValues = z.infer<typeof registerSchema>;
 
@@ -84,12 +85,14 @@ const LoginForm = () => {
             </div>
           )}
 
-          <Button
+          <LoadingButton
             type="submit"
+            isLoading={form.formState.isSubmitting}
+            messageLoading="Loading..."
             className="w-full col-span-2 mt-3 text-white transition-all duration-300 bg-primary hover:brightness-110"
           >
             {isSignIn ? "Sign in" : "Sign up"}
-          </Button>
+          </LoadingButton>
         </form>
       </Form>
 

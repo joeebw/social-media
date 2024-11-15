@@ -24,7 +24,7 @@ const UserCard = () => {
               <div className="flex gap-4">
                 <AvatarProfile
                   className="w-[3.5rem] h-[3.5rem]"
-                  profilePicture={userData?.profilePicture}
+                  profilePicture={userData?.profilePicture.url}
                   alt={"profile picture"}
                 />
 

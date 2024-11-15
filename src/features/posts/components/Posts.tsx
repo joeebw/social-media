@@ -1,16 +1,16 @@
-import { fetchAllPosts } from "@/utils/firebase";
 import Post from "./Post";
-import { useQuery } from "@tanstack/react-query";
 import { PropagateLoader } from "react-spinners";
+import useRealtimePosts from "../hooks/useRealTimePosts";
 
 const Posts = () => {
-  const { data: posts, isLoading } = useQuery({
-    queryKey: ["home posts"],
-    queryFn: fetchAllPosts,
-    select: (data) => {
-      return [...data].sort((a, b) => b.datePost - a.datePost);
-    },
-  });
+  // const { data: posts, isLoading } = useQuery({
+  //   queryKey: ["home posts"],
+  //   queryFn: fetchAllPosts,
+  //   select: (data) => {
+  //     return [...data].sort((a, b) => b.datePost - a.datePost);
+  //   },
+  // });
+  const { data: posts, isLoading } = useRealtimePosts();
   const rootStyles = getComputedStyle(document.documentElement);
   const primaryColor = rootStyles.getPropertyValue("--primary-color").trim();
 

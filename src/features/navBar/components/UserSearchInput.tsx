@@ -7,7 +7,7 @@ import { IoSearch } from "react-icons/io5";
 import { Users } from "@/ts/user.types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import clsx from "clsx";
-import useFetchUsers from "../hooks/useFetchUsers";
+import useFetchUsers from "../../../hooks/useFetchUsers";
 import { BeatLoader } from "react-spinners";
 import { Skeleton } from "@/components/ui/skeleton";
 import AvatarProfile from "@/components/AvatarProfile";

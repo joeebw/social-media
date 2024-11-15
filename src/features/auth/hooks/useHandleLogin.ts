@@ -110,10 +110,10 @@ const useAuth = () => {
   const handleSubmit = async (data: LoginFormValues | RegisterFormValues) => {
     if (isSignIn) {
       const loginData = data as LoginFormValues;
-      loginUser(loginData);
+      await loginUser(loginData);
     } else {
       const registerData = data as RegisterFormValues;
-      registerUser(registerData);
+      await registerUser(registerData);
     }
   };
 

@@ -1,6 +1,7 @@
 import { NavBar } from "@/features/navBar";
 import { Posts, PostUploader } from "@/features/posts";
-import { UserCard } from "@/features/user";
+import { SponsorCard } from "@/features/sponsors";
+import { FriendsCard, UserCard } from "@/features/user";
 
 const HomePage = () => {
   return (
@@ -18,7 +19,11 @@ const HomePage = () => {
             <Posts />
           </div>
         </div>
-        <div className="col-span-2 pl-5">Some</div>
+        <div className="flex flex-col col-span-2 pl-5 gap-7">
+          <SponsorCard />
+
+          <FriendsCard />
+        </div>
       </div>
     </div>
   );
