@@ -6,6 +6,7 @@ import { FaQuestionCircle } from "react-icons/fa";
 import { useState } from "react";
 import UserSearchInput from "./UserSearchInput";
 import DropdownUser from "./DropdownUser";
+import { Link } from "react-router-dom";
 
 const INCON_COMPONENTS = [
   {
@@ -30,7 +31,9 @@ const NavBar = () => {
       <div className="flex items-center justify-between w-10/12 mx-auto">
         {/* title and search input */}
         <div className="flex items-center gap-8">
-          <HighlightTitle>WolfStream</HighlightTitle>
+          <Link to="/home">
+            <HighlightTitle>WolfStream</HighlightTitle>
+          </Link>
           <UserSearchInput />
         </div>
 

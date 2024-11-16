@@ -6,6 +6,8 @@ import { Toaster } from "sonner";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RedirectIfAuthenticated from "./components/RedirectIfAuthenticated";
 import useAuthStateChanged from "./hooks/useAuthStateChanged";
+import ProfilePage from "./pages/ProfilePage";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
   useAuthStateChanged();
@@ -13,6 +15,7 @@ const App = () => {
   return (
     <>
       <Toaster position="top-center" richColors />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route
@@ -29,6 +32,15 @@ const App = () => {
           element={
             <ProtectedRoute>
               <HomePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/home/:id"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />

@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import userService from "../features/navBar/services/userService";
-import useAppStore from "@/state/useStore";
+import useGetUserData from "./useGetUserData";
 
 const useFetchUsers = () => {
-  const currentUserId = useAppStore((state) => state.idUser);
+  const { data: userData } = useGetUserData();
 
   const getUsers = async () => {
     try {
       const userList = await userService.fetchUsers();
 
       const filteredUserList = userList.filter(
-        (user) => user.id !== currentUserId
+        (user) => user.id !== userData?.id
       );
 
       return filteredUserList;
@@ -20,8 +20,9 @@ const useFetchUsers = () => {
   };
 
   return useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", userData?.id],
     queryFn: getUsers,
+    enabled: !!(userData && userData.id),
   });
 };
 

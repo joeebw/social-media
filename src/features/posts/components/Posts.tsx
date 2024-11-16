@@ -1,16 +1,12 @@
 import Post from "./Post";
 import { PropagateLoader } from "react-spinners";
 import useRealtimePosts from "../hooks/useRealTimePosts";
+import { useParams } from "react-router-dom";
 
 const Posts = () => {
-  // const { data: posts, isLoading } = useQuery({
-  //   queryKey: ["home posts"],
-  //   queryFn: fetchAllPosts,
-  //   select: (data) => {
-  //     return [...data].sort((a, b) => b.datePost - a.datePost);
-  //   },
-  // });
-  const { data: posts, isLoading } = useRealtimePosts();
+  const { id } = useParams();
+  const { data: posts, isLoading } = useRealtimePosts(id);
+
   const rootStyles = getComputedStyle(document.documentElement);
   const primaryColor = rootStyles.getPropertyValue("--primary-color").trim();
 

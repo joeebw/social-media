@@ -1,4 +1,4 @@
-import { fetchUserById, fetchUserList } from "@/utils/firebase";
+import { fetchUserList } from "@/utils/firebase";
 
 const fetchUsers = async () => {
   const userList = await fetchUserList();
@@ -10,12 +10,6 @@ const fetchUsers = async () => {
   return userList;
 };
 
-const fetchUser = async (id: string) => {
-  const user = await fetchUserById(id);
-  return user;
-};
-
 export default {
   fetchUsers,
-  fetchUser,
 };

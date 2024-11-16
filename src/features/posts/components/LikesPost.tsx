@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import useAppStore from "@/state/useStore";
 import { updatePostLikes } from "@/utils/firebase";
-import { useQueryClient } from "@tanstack/react-query";
 import { Heart } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";

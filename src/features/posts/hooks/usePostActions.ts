@@ -4,8 +4,15 @@ import { Comment } from "../ts/post.types";
 import { CommentFormValues } from "../components/Post";
 import { UseFormReset } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 const usePostActions = (comments: Comment[]) => {
+  const navigate = useNavigate();
+
+  const handleSelectUser = async (id: string) => {
+    navigate(`/home/${id}`);
+  };
+
   const handleDeletePost = async (
     postId: string,
     setIsDeletingPost: React.Dispatch<React.SetStateAction<boolean>>
@@ -49,6 +56,7 @@ const usePostActions = (comments: Comment[]) => {
     handleDeletePost,
     handleDeleteComment,
     handleCreateComment,
+    handleSelectUser,
   };
 };
 

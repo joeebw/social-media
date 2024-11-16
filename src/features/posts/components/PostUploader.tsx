@@ -6,7 +6,6 @@ import { IoImageOutline } from "react-icons/io5";
 import { AiOutlineFileGif } from "react-icons/ai";
 import { CgAttachment } from "react-icons/cg";
 import { FaMicrophone, FaRegTrashAlt } from "react-icons/fa";
-import useAppStore from "@/state/useStore";
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
@@ -26,7 +25,8 @@ import { createPost } from "@/utils/firebase";
 import { CreatePost } from "@/ts/post.types";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
+import useGetUserData from "@/hooks/useGetUserData";
+import { Link } from "react-router-dom";
 
 const ICONS_UPLOADER = [
   {
@@ -79,8 +79,7 @@ type FormValues = z.infer<typeof postSchema>;
 const PostUploader = () => {
   const [isUploadImage, setIsUploadImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const userData = useAppStore((state) => state.user);
-  const userId = useAppStore((state) => state.idUser);
+  const { data: userData } = useGetUserData();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(postSchema),
@@ -102,7 +101,7 @@ const PostUploader = () => {
   const handleSubmit = async (data: FormValues) => {
     try {
       const dataPost: CreatePost = {
-        userId: userId!,
+        userId: userData!.id!,
         firstName: userData!.firstName,
         lastName: userData!.lastName,
         location: userData!.location,
@@ -146,11 +145,13 @@ const PostUploader = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <div className="flex items-center gap-5">
-              <AvatarProfile
-                className="w-[3.5rem] h-[3.5rem]"
-                profilePicture={userData?.profilePicture.url}
-                alt="profile picture"
-              />
+              <Link to={`/home/${userData?.id}`}>
+                <AvatarProfile
+                  className="w-[3.5rem] h-[3.5rem]"
+                  profilePicture={userData?.profilePicture.url}
+                  alt="profile picture"
+                />
+              </Link>
 
               <FormField
                 control={form.control}

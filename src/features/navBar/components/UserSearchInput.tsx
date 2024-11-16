@@ -1,23 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IconContext } from "react-icons/lib";
 import { IoSearch } from "react-icons/io5";
-import { Users } from "@/ts/user.types";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { User } from "@/state/userStore.type";
 import clsx from "clsx";
 import useFetchUsers from "../../../hooks/useFetchUsers";
 import { BeatLoader } from "react-spinners";
-import { Skeleton } from "@/components/ui/skeleton";
 import AvatarProfile from "@/components/AvatarProfile";
+import { useNavigate } from "react-router-dom";
 
 const UserSearchInput = () => {
   const { data: users, isLoading } = useFetchUsers();
-  const [filteredUsers, setFilteredUsers] = useState<Users>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showUserCards, setShowUserCards] = useState(false);
+  const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -30,9 +29,10 @@ const UserSearchInput = () => {
     const term = event.target.value;
     setSearchTerm(term);
 
-    const filtered = users.filter((user) =>
-      user.name.toLowerCase().includes(term.toLowerCase())
-    );
+    const filtered = users.filter((user) => {
+      const name = `${user.firstName} ${user.lastName}`;
+      return name.toLowerCase().includes(term.toLowerCase());
+    });
     setFilteredUsers(filtered);
     setSelectedIndex(0);
     setShowUserCards(true);
@@ -66,8 +66,9 @@ const UserSearchInput = () => {
     }
   };
 
-  const handleUserSelect = (user: Users[0]) => {
-    console.log("Selected user:", user);
+  const handleUserSelect = (user: User) => {
+    navigate(`/home/${user.id}`);
+
     setSelectedIndex(0);
     setShowUserCards(false);
   };
@@ -126,46 +127,46 @@ const UserSearchInput = () => {
         </IconContext.Provider>
 
         {showUserCards && (
-          <Card className="absolute top-11 max-h-[20rem] w-96 shadow-lg bg-secondaryBackground z-20">
+          <Card className="absolute top-11  max-h-[20rem] overflow-y-auto w-96 shadow-lg bg-secondaryBackground z-20">
             <CardHeader>
               <CardTitle>Filtered Users</CardTitle>
             </CardHeader>
-            <ScrollArea className="h-[16rem]">
-              <CardContent className="h-full">
-                {isLoading ? (
-                  <div className="flex items-center justify-center w-full h-full">
-                    <BeatLoader color={primaryColor} />
-                  </div>
-                ) : filteredUsers.length > 0 ? (
-                  <ul className="space-y-2" ref={listRef}>
-                    {filteredUsers.map((user, index) => (
-                      <li
-                        key={user.id}
-                        className={clsx(
-                          "flex items-center gap-4 p-2 rounded-md cursor-pointer hover:bg-gray-200",
-                          index === selectedIndex ? "bg-gray-200" : ""
-                        )}
-                        onClick={() => handleUserSelect(user)}
-                      >
-                        <AvatarProfile
-                          profilePicture={user.profilePicture}
-                          alt={user.name}
-                        />
 
-                        <div>
-                          <h4 className="font-medium">{user.name}</h4>
-                          <p className="text-gray-500">{user.email}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="flex items-center justify-center h-full text-gray-500">
-                    No users found.
-                  </p>
-                )}
-              </CardContent>
-            </ScrollArea>
+            <CardContent className="h-full">
+              {isLoading ? (
+                <div className="flex items-center justify-center w-full h-full">
+                  <BeatLoader color={primaryColor} />
+                </div>
+              ) : filteredUsers.length > 0 ? (
+                <ul className="space-y-2" ref={listRef}>
+                  {filteredUsers.map((user, index) => (
+                    <li
+                      key={user.id}
+                      className={clsx(
+                        "flex items-center gap-4 p-2 rounded-md cursor-pointer hover:bg-gray-200",
+                        index === selectedIndex ? "bg-gray-200" : ""
+                      )}
+                      onClick={() => handleUserSelect(user)}
+                    >
+                      <AvatarProfile
+                        profilePicture={user.profilePicture.url}
+                        alt={user.firstName}
+                        className="h-[3rem] w-[3rem]"
+                      />
+
+                      <div>
+                        <h4 className="font-medium">{`${user.firstName} ${user.lastName}`}</h4>
+                        <p className="text-gray-500">{user.email}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="flex items-center justify-center h-full text-gray-500">
+                  No users found.
+                </p>
+              )}
+            </CardContent>
           </Card>
         )}
       </div>

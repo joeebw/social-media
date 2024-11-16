@@ -1,17 +1,18 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { MdOutlineLocationOn, MdOutlineEdit } from "react-icons/md";
-import useAppStore from "@/state/useStore";
 import { IconContext } from "react-icons/lib";
 import { TbBriefcase2 } from "react-icons/tb";
 import { FaTwitter, FaLinkedin } from "react-icons/fa";
 import AvatarProfile from "@/components/AvatarProfile";
+import useGetUserData from "@/hooks/useGetUserData";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "react-router-dom";
 
 const UserCard = () => {
-  const userData = useAppStore((state) => state.user);
+  const { data: userData, isLoading } = useGetUserData();
+  const friends = userData?.friends;
   const name = userData ? `${userData.firstName} ${userData.lastName}` : "";
 
   return (
@@ -22,16 +23,33 @@ const UserCard = () => {
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex gap-4">
-                <AvatarProfile
-                  className="w-[3.5rem] h-[3.5rem]"
-                  profilePicture={userData?.profilePicture.url}
-                  alt={"profile picture"}
-                />
+                <Link to={`/home/${userData?.id}`}>
+                  <AvatarProfile
+                    className="w-[3.5rem] h-[3.5rem]"
+                    profilePicture={userData?.profilePicture.url}
+                    alt={"profile picture"}
+                  />
+                </Link>
 
                 <div className="flex justify-between">
                   <div>
-                    <h3 className="text-lg font-bold">{name}</h3>
-                    <span className="text-sm text-gray-400">0 Friends</span>
+                    {isLoading ? (
+                      <>
+                        <Skeleton className="w-32 h-6 mb-2" />
+                        <Skeleton className="w-20 h-4" />
+                      </>
+                    ) : (
+                      <>
+                        <h3 className="text-lg font-bold">{name}</h3>
+                        <span className="text-sm text-gray-400">
+                          {friends?.length === 0
+                            ? "No Friends"
+                            : friends?.length === 1
+                            ? "1 Friend"
+                            : `${friends?.length} Friends`}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -46,11 +64,19 @@ const UserCard = () => {
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-4">
                 <MdOutlineLocationOn className="text-gray-700" />
-                <span>{userData?.location}</span>
+                {isLoading ? (
+                  <Skeleton className="w-24 h-4" />
+                ) : (
+                  <span>{userData?.location}</span>
+                )}
               </div>
               <div className="flex items-center gap-4">
                 <TbBriefcase2 className="text-gray-700" />
-                <span>{userData?.occupation}</span>
+                {isLoading ? (
+                  <Skeleton className="w-32 h-4" />
+                ) : (
+                  <span>{userData?.occupation}</span>
+                )}
               </div>
             </div>
 

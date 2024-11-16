@@ -2,10 +2,12 @@ import { IconContext } from "react-icons/lib";
 import { TiUserAddOutline } from "react-icons/ti";
 import { HiOutlineUserRemove } from "react-icons/hi";
 import { Button } from "@/components/ui/button";
-import useAppStore from "@/state/useStore";
-import { fetchUserById, updateUserFriends } from "@/utils/firebase";
+import { updateUserFriends } from "@/utils/firebase";
 import { toast } from "sonner";
 import { useState } from "react";
+import useGetUserData from "@/hooks/useGetUserData";
+import { useQueryClient } from "@tanstack/react-query";
+import useAppStore from "@/state/useStore";
 
 type Props = {
   isMyFriend: boolean;
@@ -14,21 +16,18 @@ type Props = {
 
 const AddAndRemoveFriends = ({ isMyFriend, friendId }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
-  const userFriendList = useAppStore((state) => state.user?.friends);
-  const currentUserId = useAppStore((state) => state.idUser);
-  const setUser = useAppStore((state) => state.setUser);
+  const { data: currentUser } = useGetUserData(true);
+  const myUserId = useAppStore((state) => state.idUser);
+  const queryClient = useQueryClient();
+
+  const userFriendList = currentUser?.friends;
 
   const addFriend = async (idFriend: string) => {
     try {
       setIsLoading(true);
       const newUserFriendList = [...(userFriendList as string[]), idFriend];
-      await updateUserFriends(currentUserId as string, newUserFriendList);
-      const user = await fetchUserById(currentUserId as string);
-      if (!user) {
-        console.error("User not found");
-        throw Error;
-      }
-      setUser(user);
+      await updateUserFriends(currentUser?.id as string, newUserFriendList);
+      queryClient.invalidateQueries({ queryKey: ["user", myUserId] });
     } catch (error) {
       toast.error("Oops! Can't add new friend, please try again");
     } finally {
@@ -42,13 +41,11 @@ const AddAndRemoveFriends = ({ isMyFriend, friendId }: Props) => {
       const filteredUserFriendList = userFriendList!.filter(
         (id) => id !== idFriend
       );
-      await updateUserFriends(currentUserId as string, filteredUserFriendList);
-      const user = await fetchUserById(currentUserId as string);
-      if (!user) {
-        console.error("User not found");
-        throw Error;
-      }
-      setUser(user);
+      await updateUserFriends(
+        currentUser?.id as string,
+        filteredUserFriendList
+      );
+      queryClient.invalidateQueries({ queryKey: ["user", myUserId] });
     } catch (error) {
       toast.error("Oops! Can't remove friend, please try again");
     } finally {

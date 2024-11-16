@@ -9,9 +9,10 @@ import { Button } from "@/components/ui/button";
 import useAppStore from "@/state/useStore";
 import { logoutUser } from "@/utils/firebase";
 import { useQueryClient } from "@tanstack/react-query";
+import useGetUserData from "@/hooks/useGetUserData";
 
 const DropdownUser = () => {
-  const userData = useAppStore((state) => state.user);
+  const { data: userData } = useGetUserData(true);
   const resetAppStore = useAppStore((state) => state.resetAppStore);
   const name = userData ? `${userData.firstName} ${userData.lastName}` : "";
   const queryClient = useQueryClient();

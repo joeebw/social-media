@@ -18,8 +18,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import usePostActions from "../hooks/usePostActions";
 import ImageWithSkeleton from "@/components/ImageWithSkeleton";
-import useAppStore from "@/state/useStore";
 import LikesPost from "./LikesPost";
+import AddAndRemoveFriends from "@/features/user/components/AddAndRemoveFriends";
+import useGetUserData from "@/hooks/useGetUserData";
 
 type Props = {
   postItem: PostType;
@@ -50,11 +51,19 @@ const Post = ({ postItem }: Props) => {
   } = postItem;
   const [isOpenComments, setIsOpenComments] = useState(false);
   const [isDeletingPost, setIsDeletingPost] = useState(false);
-  const { handleCreateComment, handleDeleteComment, handleDeletePost } =
-    usePostActions(comments);
+  const { data: myUser } = useGetUserData(true);
+
+  const {
+    handleCreateComment,
+    handleDeleteComment,
+    handleDeletePost,
+    handleSelectUser,
+  } = usePostActions(comments);
   const name = `${firstName} ${lastName}`;
   const timeAgoPost = timeAgo(datePost);
-  const userId = useAppStore((state) => state.idUser);
+
+  const usersFriendIdList = myUser?.friends;
+  const isMyFriend = usersFriendIdList?.includes(userPostId) ?? false;
 
   const {
     register,
@@ -75,18 +84,27 @@ const Post = ({ postItem }: Props) => {
           <AvatarProfile
             profilePicture={userPicturePath}
             alt="profile picture"
+            className="cursor-pointer"
+            onClick={() => handleSelectUser(userPostId)}
           />
           <div className="flex flex-col">
-            <p className="text-sm font-semibold">{name}</p>
+            <p
+              className="text-sm font-semibold transition cursor-pointer hover:text-primary"
+              onClick={() => handleSelectUser(userPostId)}
+            >
+              {name}
+            </p>
             <p className="text-xs text-muted-foreground">{timeAgoPost}</p>
           </div>
         </div>
 
-        {userId === userPostId && (
+        {myUser?.id === userPostId ? (
           <DropdownDelete
             isLoading={isDeletingPost}
             onDelete={() => handleDeletePost(postItem.id, setIsDeletingPost)}
           />
+        ) : (
+          <AddAndRemoveFriends friendId={userPostId} isMyFriend={isMyFriend} />
         )}
       </CardHeader>
       <CardContent>

@@ -1,8 +1,11 @@
 import { ReactNode } from "react";
 
-const HighlightTitle = ({ children }: { children: ReactNode }) => {
+const HighlightTitle = ({ children, ...rest }: { children: ReactNode }) => {
   return (
-    <h1 className="text-3xl font-extrabold tracking-wide cursor-default text-primary">
+    <h1
+      className="text-3xl font-extrabold tracking-wide cursor-pointer text-primary"
+      {...rest}
+    >
       {children}
     </h1>
   );

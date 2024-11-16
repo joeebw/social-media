@@ -217,6 +217,7 @@ export const logoutUser = async () => {
 };
 
 export const fetchUserById = async (id: string) => {
+  console.log("Running fetch user by id: ", id);
   try {
     const userDocRef = doc(db, "usersWolfstream", id);
     const userDoc = await getDoc(userDocRef);
@@ -312,13 +313,8 @@ export const fetchAllPosts = async () => {
 export const subscribeToAllPosts = (
   onUpdate: (posts: Post[]) => void
 ): (() => void) => {
-  console.log("Iniciando suscripción a posts");
-
   const unsubscribe = onSnapshot(
     collection(db, "postsWolfstream"),
-    {
-      includeMetadataChanges: true,
-    },
     (snapshot) => {
       console.log("Change detected in posts");
       const posts: Post[] = [];
@@ -332,6 +328,36 @@ export const subscribeToAllPosts = (
     },
     (error) => {
       console.error("Error in suscription:", error);
+    }
+  );
+
+  return unsubscribe;
+};
+
+export const subscribeToUserPosts = (
+  userId: string,
+  onUpdate: (posts: Post[]) => void
+): (() => void) => {
+  const q = query(
+    collection(db, "postsWolfstream"),
+    where("userId", "==", userId)
+  );
+
+  const unsubscribe = onSnapshot(
+    q,
+    (snapshot) => {
+      console.log("Change detected in user posts");
+      const posts: Post[] = [];
+      snapshot.forEach((doc) => {
+        posts.push({
+          id: doc.id,
+          ...doc.data(),
+        } as Post);
+      });
+      onUpdate(posts);
+    },
+    (error) => {
+      console.error("Error in subscription:", error);
     }
   );
 
