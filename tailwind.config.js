@@ -57,10 +57,3 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 };
-
-// colors: {
-//   background: "var(--background-color)",
-//   secondaryBackground: "var(--secondary-background-color)",
-//   text: "var(--text-color)",
-//   primary: "var(--primary-color)",
-// },

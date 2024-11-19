@@ -26,7 +26,8 @@ import { CreatePost } from "@/ts/post.types";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import useGetUserData from "@/hooks/useGetUserData";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import useAppStore from "@/state/useStore";
 
 const ICONS_UPLOADER = [
   {
@@ -80,6 +81,8 @@ const PostUploader = () => {
   const [isUploadImage, setIsUploadImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { data: userData } = useGetUserData();
+  const { id } = useParams();
+  const myUserId = useAppStore((state) => state.idUser);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(postSchema),
@@ -164,7 +167,10 @@ const PostUploader = () => {
                         placeholder="What's on your mind..."
                         className="pt-3 resize-none rounded-3xl focus:border-primary focus:ring-primary"
                         onKeyDown={handleKeyDown}
-                        disabled={form.formState.isSubmitting}
+                        disabled={
+                          form.formState.isSubmitting ||
+                          (id !== undefined && id !== myUserId)
+                        }
                       />
                     </FormControl>
                     <FormMessage className="text-red-500" />
@@ -187,7 +193,9 @@ const PostUploader = () => {
                   <IconContext.Provider value={{ size: "1.2rem" }}>
                     <FaRegTrashAlt
                       className="text-red-500 transition cursor-pointer hover:text-red-400"
-                      onClick={() => setIsUploadImage(false)}
+                      onClick={() => {
+                        setIsUploadImage(false);
+                      }}
                     />
                   </IconContext.Provider>
                 </div>
@@ -203,7 +211,10 @@ const PostUploader = () => {
                       "flex items-center gap-2 p-2 font-medium transition",
                       "cursor-pointer text-gray-500 rounded-md hover:bg-gray-200"
                     )}
-                    onClick={() => setIsUploadImage(true)}
+                    onClick={() => {
+                      if (id !== undefined && id !== myUserId) return;
+                      setIsUploadImage(true);
+                    }}
                     key={name}
                   >
                     {icon}
@@ -224,7 +235,10 @@ const PostUploader = () => {
               })}
               <Button
                 className="w-20 text-white"
-                disabled={form.formState.isSubmitting}
+                disabled={
+                  form.formState.isSubmitting ||
+                  (id !== undefined && id !== myUserId)
+                }
               >
                 {form.formState.isSubmitting && (
                   <Loader2 className="animate-spin" />

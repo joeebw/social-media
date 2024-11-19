@@ -8,10 +8,12 @@ import { FaTwitter, FaLinkedin } from "react-icons/fa";
 import AvatarProfile from "@/components/AvatarProfile";
 import useGetUserData from "@/hooks/useGetUserData";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import UserProfileModal from "./UserProfileModal";
 
 const UserCard = () => {
   const { data: userData, isLoading } = useGetUserData();
+  const { id } = useParams();
   const friends = userData?.friends;
   const name = userData ? `${userData.firstName} ${userData.lastName}` : "";
 
@@ -23,13 +25,23 @@ const UserCard = () => {
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex gap-4">
-                <Link to={`/home/${userData?.id}`}>
-                  <AvatarProfile
-                    className="w-[3.5rem] h-[3.5rem]"
-                    profilePicture={userData?.profilePicture.url}
-                    alt={"profile picture"}
-                  />
-                </Link>
+                {id ? (
+                  <UserProfileModal profileUrl={userData?.profilePicture.url}>
+                    <AvatarProfile
+                      className="w-[3.5rem] h-[3.5rem] cursor-pointer"
+                      profilePicture={userData?.profilePicture.url}
+                      alt="profile picture"
+                    />
+                  </UserProfileModal>
+                ) : (
+                  <Link to={`/home/${userData?.id}`}>
+                    <AvatarProfile
+                      className="w-[3.5rem] h-[3.5rem]"
+                      profilePicture={userData?.profilePicture.url}
+                      alt={"profile picture"}
+                    />
+                  </Link>
+                )}
 
                 <div className="flex justify-between">
                   <div>

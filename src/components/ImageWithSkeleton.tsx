@@ -25,6 +25,8 @@ const ImageWithSkeleton = ({
       <img
         src={src}
         alt={alt}
+        loading="lazy"
+        decoding="async"
         className={`${className} ${
           imageLoaded ? "opacity-100" : "opacity-0"
         } transition-opacity duration-300`}

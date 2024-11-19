@@ -13,6 +13,7 @@ import {
   getDocs,
   getFirestore,
   onSnapshot,
+  orderBy,
   query,
   setDoc,
   updateDoc,
@@ -311,55 +312,51 @@ export const fetchAllPosts = async () => {
 };
 
 export const subscribeToAllPosts = (
-  onUpdate: (posts: Post[]) => void
+  onUpdate: (posts: Post[], snapshot: any) => void
 ): (() => void) => {
-  const unsubscribe = onSnapshot(
+  console.log("running sucribe to all posts");
+
+  const q = query(
     collection(db, "postsWolfstream"),
-    (snapshot) => {
-      console.log("Change detected in posts");
-      const posts: Post[] = [];
-      snapshot.forEach((doc) => {
-        posts.push({
-          id: doc.id,
-          ...doc.data(),
-        } as Post);
-      });
-      onUpdate(posts);
-    },
-    (error) => {
-      console.error("Error in suscription:", error);
-    }
+    orderBy("datePost", "desc")
   );
+
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    const posts: Post[] = [];
+    snapshot.forEach((doc) => {
+      posts.push({
+        id: doc.id,
+        ...doc.data(),
+      } as Post);
+    });
+    onUpdate(posts, snapshot);
+  });
 
   return unsubscribe;
 };
 
 export const subscribeToUserPosts = (
   userId: string,
-  onUpdate: (posts: Post[]) => void
+  onUpdate: (posts: Post[], snapshot: any) => void
 ): (() => void) => {
+  console.log("running sucribe to users posts");
+
   const q = query(
     collection(db, "postsWolfstream"),
-    where("userId", "==", userId)
+    where("userId", "==", userId),
+    orderBy("datePost", "desc")
   );
 
-  const unsubscribe = onSnapshot(
-    q,
-    (snapshot) => {
-      console.log("Change detected in user posts");
-      const posts: Post[] = [];
-      snapshot.forEach((doc) => {
-        posts.push({
-          id: doc.id,
-          ...doc.data(),
-        } as Post);
-      });
-      onUpdate(posts);
-    },
-    (error) => {
-      console.error("Error in subscription:", error);
-    }
-  );
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    const posts: Post[] = [];
+    snapshot.forEach((doc) => {
+      posts.push({
+        id: doc.id,
+        ...doc.data(),
+      } as Post);
+    });
+    onUpdate(posts, snapshot);
+  });
 
   return unsubscribe;
 };

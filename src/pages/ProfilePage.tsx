@@ -21,7 +21,7 @@ const ProfilePage = () => {
           <SponsorCard />
         </div>
         <div className="col-span-4 px-5">
-          {id === myUserId && <PostUploader />}
+          <PostUploader />
 
           <div className={clsx(id === myUserId && "mt-10")}>
             <Posts />
