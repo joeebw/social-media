@@ -1,9 +1,17 @@
+import clsx from "clsx";
 import { ReactNode } from "react";
+import { useLocation } from "react-router-dom";
 
 const HighlightTitle = ({ children, ...rest }: { children: ReactNode }) => {
+  const pathName = useLocation().pathname;
+  console.log("pathName: ", pathName);
+
   return (
     <h1
-      className="text-3xl font-extrabold tracking-wide cursor-pointer text-primary"
+      className={clsx(
+        "text-2xl lg:text-3xl font-extrabold tracking-wide text-primary",
+        pathName === "/login" ? "cursor-default" : "cursor-pointer"
+      )}
       {...rest}
     >
       {children}

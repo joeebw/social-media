@@ -6,29 +6,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import useAppStore from "@/state/useStore";
-import { logoutUser } from "@/utils/firebase";
-import { useQueryClient } from "@tanstack/react-query";
+
 import useGetUserData from "@/hooks/useGetUserData";
+import useLogout from "../hooks/useLogout";
 
 const DropdownUser = () => {
   const { data: userData } = useGetUserData(true);
-  const resetAppStore = useAppStore((state) => state.resetAppStore);
-  const name = userData ? `${userData.firstName} ${userData.lastName}` : "";
-  const queryClient = useQueryClient();
+  const { handleLogout } = useLogout();
 
-  const handleLogout = () => {
-    resetAppStore();
-    queryClient.clear();
-    logoutUser();
-  };
+  const name = userData ? `${userData.firstName} ${userData.lastName}` : "";
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="min-w-[5rem] font-normal rounded-md bg-gray-200"
+          className="hidden lg:block min-w-[5rem] font-normal rounded-md bg-gray-200"
         >
           {name}
         </Button>

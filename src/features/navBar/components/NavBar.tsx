@@ -7,6 +7,7 @@ import { useState } from "react";
 import UserSearchInput from "./UserSearchInput";
 import DropdownUser from "./DropdownUser";
 import { Link } from "react-router-dom";
+import MovileDrawer from "./MobileDrawer";
 
 const INCON_COMPONENTS = [
   {
@@ -28,19 +29,20 @@ const NavBar = () => {
 
   return (
     <nav className="flex items-center justify-center h-20 shadow-sm bg-secondaryBackground">
-      <div className="flex items-center justify-between w-10/12 mx-auto">
+      <div className="flex items-center justify-between w-11/12 mx-auto xl:w-10/12">
         {/* title and search input */}
         <div className="flex items-center gap-8">
           <Link to="/home">
             <HighlightTitle>WolfStream</HighlightTitle>
           </Link>
-          <UserSearchInput />
+
+          <UserSearchInput className="hidden lg:block" />
         </div>
 
         <IconContext.Provider value={{ size: "1.3rem" }}>
           <div className="flex items-center gap-6">
             <div
-              className="p-2 transition-all rounded-md cursor-pointer hover:bg-gray-300"
+              className="hidden p-2 transition-all rounded-md cursor-pointer lg:block hover:bg-gray-300"
               onClick={() => setIsDayMode(!isDayMode)}
             >
               {isDayMode ? <IoMdSunny /> : <MdNightlightRound />}
@@ -49,7 +51,7 @@ const NavBar = () => {
             {INCON_COMPONENTS.map((icon) => {
               return (
                 <div
-                  className="p-2 text-gray-500 rounded-md cursor-not-allowed"
+                  className="hidden p-2 text-gray-500 rounded-md cursor-not-allowed lg:block"
                   key={icon.key}
                 >
                   {icon.icon}
@@ -60,6 +62,9 @@ const NavBar = () => {
             <DropdownUser />
           </div>
         </IconContext.Provider>
+
+        {/* Hamburger Menu Movile */}
+        <MovileDrawer />
       </div>
     </nav>
   );

@@ -45,7 +45,7 @@ const ImageDropzone = ({
         ) : selectedFile ? (
           <p>{selectedFile.name}</p>
         ) : (
-          <p>{dropzoneText}</p>
+          <p className="text-sm sm:text-base">{dropzoneText}</p>
         )}
       </div>
       {error && <p className="mt-1 text-sm text-red-500">{error.message}</p>}

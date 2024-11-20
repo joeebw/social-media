@@ -10,7 +10,11 @@ import { BeatLoader } from "react-spinners";
 import AvatarProfile from "@/components/AvatarProfile";
 import { useNavigate } from "react-router-dom";
 
-const UserSearchInput = () => {
+type Props = {
+  className?: string;
+};
+
+const UserSearchInput = ({ className }: Props) => {
   const { data: users, isLoading } = useFetchUsers();
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -105,8 +109,8 @@ const UserSearchInput = () => {
   }, [users]);
 
   return (
-    <div className="w-full max-w-md" ref={containerRef}>
-      <div className="relative w-64">
+    <div className={`w-full max-w-md ${className}`} ref={containerRef}>
+      <div className="relative w-full lg:w-64">
         <Input
           className="bg-gray-100 rounded-lg pr-9 focus:border-primary focus:ring-primary"
           type="text"
@@ -127,7 +131,7 @@ const UserSearchInput = () => {
         </IconContext.Provider>
 
         {showUserCards && (
-          <Card className="absolute top-11  max-h-[20rem] overflow-y-auto w-96 shadow-lg bg-secondaryBackground z-20">
+          <Card className="absolute top-11 -left-24 lg:left-0 max-h-[20rem] overflow-y-auto w-[20rem]  lg:w-96 shadow-lg bg-secondaryBackground z-20 overflow-x-hidden">
             <CardHeader>
               <CardTitle>Filtered Users</CardTitle>
             </CardHeader>
@@ -151,12 +155,14 @@ const UserSearchInput = () => {
                       <AvatarProfile
                         profilePicture={user.profilePicture.url}
                         alt={user.firstName}
-                        className="h-[3rem] w-[3rem]"
+                        className="lg:h-[3rem] lg:w-[3rem]"
                       />
 
                       <div>
-                        <h4 className="font-medium">{`${user.firstName} ${user.lastName}`}</h4>
-                        <p className="text-gray-500">{user.email}</p>
+                        <h4 className="text-sm font-medium lg:text-base">{`${user.firstName} ${user.lastName}`}</h4>
+                        <p className="text-sm text-gray-500 lg:text-base">
+                          {user.email}
+                        </p>
                       </div>
                     </li>
                   ))}
