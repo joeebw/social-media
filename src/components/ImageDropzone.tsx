@@ -33,7 +33,7 @@ const ImageDropzone = ({
       <div
         {...getRootProps()}
         className={clsx(
-          "border-2 border-dashed rounded-lg p-6 cursor-pointer text-center text-primary",
+          "border-2 border-dashed rounded-lg p-4 xl:p-6 cursor-pointer text-center text-primary",
           "transition-all duration-200",
           error ? "border-red-500" : "border-primary",
           "hover:opacity-50"

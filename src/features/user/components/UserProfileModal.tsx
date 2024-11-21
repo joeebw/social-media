@@ -24,7 +24,7 @@ const UserProfileModal = ({ children, profileUrl }: Props) => {
         <VisuallyHidden>
           <DialogTitle>Imagen de Perfil</DialogTitle>
         </VisuallyHidden>
-        <DialogContent className="w-auto max-w-2xl p-4">
+        <DialogContent className="max-w-2xl p-4 w-[98%] sm:w-[80%] lg:w-auto">
           <div className="flex justify-center p-4">
             <ImageWithSkeleton
               src={profileUrl!}

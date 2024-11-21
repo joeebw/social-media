@@ -23,7 +23,7 @@ const SponsorCard = () => {
         />
       </CardContent>
       <CardFooter className="block">
-        <div className="flex justify-between text-sm item-center">
+        <div className="flex text-sm gap-0.5 flex-col 2xl:flex-row 2xl:justify-between item-center">
           <span className="font-medium">Moonlight Brews Café</span>
           <span className="text-gray-400">moonlightbrewscafe.com</span>
         </div>

@@ -31,7 +31,6 @@ const MAX_CHARACTERS = 100;
 const commentSchema = z.object({
   comment: z
     .string()
-    .min(1, "Comment cannot be empty")
     .max(MAX_CHARACTERS, `Comment cannot exceed ${MAX_CHARACTERS} characters`),
 });
 
@@ -73,6 +72,7 @@ const Post = ({ postItem }: Props) => {
     formState: { errors, isSubmitting },
   } = useForm<CommentFormValues>({
     resolver: zodResolver(commentSchema),
+    mode: "onSubmit",
   });
 
   const isButtonDisabled = !watch("comment") || isSubmitting;
@@ -107,14 +107,14 @@ const Post = ({ postItem }: Props) => {
           <AddAndRemoveFriends friendId={userPostId} isMyFriend={isMyFriend} />
         )}
       </CardHeader>
-      <CardContent>
-        <p className="text-base">{description}</p>
+      <CardContent className="px-0 sm:px-6">
+        <p className="px-4 text-base sm:px-6">{description}</p>
 
         {picturePath && (
           <ImageWithSkeleton
             src={picturePath}
             alt="post image"
-            containerClassName="w-full mt-4 h-[700px]"
+            containerClassName="w-full mt-4 h-[550px] sm:h-[700px]"
             className="absolute object-cover w-full h-full rounded-lg"
           />
         )}
@@ -147,27 +147,29 @@ const Post = ({ postItem }: Props) => {
               <Separator className="my-1" />
 
               <form
-                className="flex items-center gap-2 mt-2"
+                className="flex gap-1 mt-2 sm:gap-2"
                 onSubmit={handleSubmit((data) =>
                   handleCreateComment(data, postItem.id, reset)
                 )}
               >
-                <Input
-                  {...register("comment")}
-                  type="text"
-                  className="min-w-[20rem] w-[55%] focus:ring-primary"
-                  placeholder="Comment..."
-                />
-                <div className="flex justify-between mt-1 text-sm text-gray-500">
+                <div className="flex-1">
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Input
+                      {...register("comment")}
+                      type="text"
+                      className="w-full sm:min-w-[20rem] sm:w-[55%] focus:ring-primary"
+                      placeholder="Comment..."
+                    />
+                    <Button size="sm" disabled={isButtonDisabled}>
+                      Comment
+                    </Button>
+                  </div>
                   {errors.comment && (
                     <span className="text-red-500">
                       {errors.comment.message}
                     </span>
                   )}
                 </div>
-                <Button size="sm" disabled={isButtonDisabled}>
-                  Comment
-                </Button>
               </form>
 
               <Separator className="mt-4 mb-1" />

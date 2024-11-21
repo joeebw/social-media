@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import useGetUserData from "@/hooks/useGetUserData";
 import { Link, useParams } from "react-router-dom";
 import useAppStore from "@/state/useStore";
+import useViewportBreakpoint from "@/hooks/useViewportBreakpoint";
 
 const ICONS_UPLOADER = [
   {
@@ -83,6 +84,7 @@ const PostUploader = () => {
   const { data: userData } = useGetUserData();
   const { id } = useParams();
   const myUserId = useAppStore((state) => state.idUser);
+  const xlSize = useViewportBreakpoint(1280);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(postSchema),
@@ -147,10 +149,10 @@ const PostUploader = () => {
       <CardContent className="py-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-3 sm:gap-5">
               <Link to={`/home/${userData?.id}`}>
                 <AvatarProfile
-                  className="w-[3.5rem] h-[3.5rem]"
+                  className="w-[3.1rem] h-[3.1rem] sm:w-[3.2rem] sm:h-[3.2rem] xl:w-[3.5rem] xl:h-[3.5rem]"
                   profilePicture={userData?.profilePicture.url}
                   alt="profile picture"
                 />
@@ -165,7 +167,7 @@ const PostUploader = () => {
                       <Textarea
                         {...field}
                         placeholder="What's on your mind..."
-                        className="pt-3 resize-none rounded-3xl focus:border-primary focus:ring-primary"
+                        className="pt-3 text-sm resize-none sm:text-base rounded-3xl focus:border-primary focus:ring-primary"
                         onKeyDown={handleKeyDown}
                         disabled={
                           form.formState.isSubmitting ||
@@ -203,17 +205,18 @@ const PostUploader = () => {
             )}
             <Separator className="my-3 bg-gray-300" />
 
-            <div className="flex justify-between">
+            <div className="flex items-center justify-between">
               {ICONS_UPLOADER.map(({ icon, name }) => {
                 return name === "Image" ? (
                   <div
                     className={clsx(
                       "flex items-center gap-2 p-2 font-medium transition",
-                      "cursor-pointer text-gray-500 rounded-md hover:bg-gray-200"
+                      "cursor-pointer text-gray-500 rounded-md hover:bg-gray-200",
+                      "text-sm xl:text-base"
                     )}
                     onClick={() => {
                       if (id !== undefined && id !== myUserId) return;
-                      setIsUploadImage(true);
+                      setIsUploadImage(!isUploadImage);
                     }}
                     key={name}
                   >
@@ -223,8 +226,9 @@ const PostUploader = () => {
                 ) : (
                   <div
                     className={clsx(
-                      "flex items-center gap-2 p-2 font-medium transition",
-                      "text-gray-400 cursor-not-allowed"
+                      "hidden sm:flex items-center gap-2 p-2 font-medium transition",
+                      "text-gray-400 cursor-not-allowed",
+                      "text-sm xl:text-base"
                     )}
                     key={name}
                   >
@@ -239,6 +243,7 @@ const PostUploader = () => {
                   form.formState.isSubmitting ||
                   (id !== undefined && id !== myUserId)
                 }
+                size={xlSize ? "default" : "sm"}
               >
                 {form.formState.isSubmitting && (
                   <Loader2 className="animate-spin" />

@@ -28,7 +28,7 @@ const UserCard = () => {
                 {id ? (
                   <UserProfileModal profileUrl={userData?.profilePicture.url}>
                     <AvatarProfile
-                      className="w-[3.5rem] h-[3.5rem] cursor-pointer"
+                      className="w-[3.2rem] h-[3.2rem] xl:w-[3.5rem] xl:h-[3.5rem] cursor-pointer"
                       profilePicture={userData?.profilePicture.url}
                       alt="profile picture"
                     />
@@ -36,7 +36,7 @@ const UserCard = () => {
                 ) : (
                   <Link to={`/home/${userData?.id}`}>
                     <AvatarProfile
-                      className="w-[3.5rem] h-[3.5rem]"
+                      className="w-[3.2rem] h-[3.2rem] xl:w-[3.5rem] xl:h-[3.5rem]"
                       profilePicture={userData?.profilePicture.url}
                       alt={"profile picture"}
                     />
@@ -52,7 +52,9 @@ const UserCard = () => {
                       </>
                     ) : (
                       <>
-                        <h3 className="text-lg font-bold">{name}</h3>
+                        <h3 className="text-base font-bold xl:text-lg">
+                          {name}
+                        </h3>
                         <span className="text-sm text-gray-400">
                           {friends?.length === 0
                             ? "No Friends"

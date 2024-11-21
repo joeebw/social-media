@@ -2,30 +2,34 @@ import { NavBar } from "@/features/navBar";
 import { Posts, PostUploader } from "@/features/posts";
 import { SponsorCard } from "@/features/sponsors";
 import { FriendsCard, UserCard } from "@/features/user";
-import useAppStore from "@/state/useStore";
-import clsx from "clsx";
-import { useParams } from "react-router-dom";
 
 const ProfilePage = () => {
-  const { id } = useParams();
-  const myUserId = useAppStore((state) => state.idUser);
-
   return (
     <div className="flex flex-col w-full min-h-screen pb-12">
       <NavBar />
 
-      <div className="grid flex-1 w-[65%] grid-cols-6 mx-auto mt-7">
-        <div className="flex flex-col col-span-2 gap-8 pr-5">
+      <div className="flex flex-col flex-1 w-full gap-8 mx-auto sm:w-5/6 lg:gap-0 lg:w-full lg:grid lg:grid-cols-6 lg:px-20 2xl:px-60 mt-7">
+        <div className="flex-col hidden gap-8 lg:flex lg:col-span-2 lg:pr-5">
           <UserCard />
           <FriendsCard />
           <SponsorCard />
         </div>
-        <div className="col-span-4 px-5">
+
+        <div className="lg:hidden">
+          <UserCard />
+        </div>
+
+        <div className="lg:col-span-4 lg:pl-5">
           <PostUploader />
 
-          <div className={clsx(id === myUserId && "mt-10")}>
+          <div className="mt-8 lg:mt-10">
             <Posts />
           </div>
+        </div>
+        <div className="flex flex-col gap-8 lg:hidden">
+          <SponsorCard />
+
+          <FriendsCard />
         </div>
       </div>
     </div>

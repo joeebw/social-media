@@ -25,13 +25,13 @@ const FriendsCard = () => {
             isMyFriend,
           }) => (
             <div
-              className="flex flex-row items-center justify-between"
+              className="flex flex-row items-center justify-between gap-1.5"
               key={id}
             >
               <div className="flex items-center gap-2">
                 <Link to={`/home/${id}`}>
                   <AvatarProfile
-                    className="w-[3.5rem] h-[3.5rem]"
+                    className="w-[2.9rem] h-[2.9rem] 2xl:w-[3.5rem] 2xl:h-[3.5rem]"
                     profilePicture={profilePicture.url}
                     alt={"profile picture"}
                   />
@@ -39,9 +39,9 @@ const FriendsCard = () => {
 
                 <div className="flex flex-col">
                   <Link to={`/home/${id}`}>
-                    <span className="font-medium">{`${firstName} ${lastName}`}</span>
+                    <span className="text-sm font-medium xl:text-base">{`${firstName} ${lastName}`}</span>
                   </Link>
-                  <span className="text-sm text-gray-400 bg-">
+                  <span className="text-xs text-gray-400 xl:text-sm">
                     {occupation}
                   </span>
                 </div>
