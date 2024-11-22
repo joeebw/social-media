@@ -5,19 +5,11 @@
 
 [functions]
   node_bundler = "esbuild"
-  external_node_modules = []
-  included_files = ["node_modules/**"]
-
-[build.environment]
-  NODE_VERSION = "18"
-  NPM_FLAGS = "--version"
-  
-[dev]
-  command = "pnpm run dev"
-  framework = "#custom"
-  port = 5173
-  targetPort = 5173
-  publish = "dist"
+  included_files = [
+    "node_modules/axios/**",
+    "node_modules/busboy/**",
+    "node_modules/form-data/**"
+  ]
 
 [[redirects]]
   from = "/*"
