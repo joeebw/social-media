@@ -59,6 +59,9 @@ importers:
       firebase:
         specifier: ^11.0.1
         version: 11.0.1
+      follow-redirects:
+        specifier: ^1.15.9
+        version: 1.15.9(debug@4.3.7)
       form-data:
         specifier: ^4.0.1
         version: 4.0.1
