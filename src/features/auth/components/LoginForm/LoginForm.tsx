@@ -18,10 +18,17 @@ export type RegisterFormValues = z.infer<typeof registerSchema>;
 const LoginForm = () => {
   const isSignIn = useAppStore((state) => state.isSignIn);
   const toggleSignIn = useAppStore((state) => state.toggleSignIn);
-  const { form, handleFileSelect, handleSubmit, selectedFile } = useAuth();
+  const {
+    form,
+    handleFileSelect,
+    handleSubmit,
+    selectedFile,
+    isLoadingLoginGuest,
+    loginGuest,
+  } = useAuth();
 
   return (
-    <div className="w-full sm:w-[47rem] rounded-lg shadow-md p-9 bg-secondaryBackground">
+    <div className="w-full sm:w-[47rem] rounded-lg shadow-md p-5 sm:p-9 bg-card">
       <p className="font-medium text-text">
         Welcome to WolfStream, Sign in to start streaming your favorite content!
       </p>
@@ -84,14 +91,28 @@ const LoginForm = () => {
             </div>
           )}
 
-          <LoadingButton
-            type="submit"
-            isLoading={form.formState.isSubmitting}
-            messageLoading="Loading..."
-            className="w-full col-span-2 mt-3 text-white transition-all duration-300 bg-primary hover:brightness-110"
-          >
-            {isSignIn ? "Sign in" : "Sign up"}
-          </LoadingButton>
+          <div className="flex col-span-2 gap-4 mt-3">
+            <LoadingButton
+              type="submit"
+              isLoading={form.formState.isSubmitting}
+              messageLoading="Loading..."
+              className="w-full transition-all duration-300 hover:brightness-110"
+            >
+              {isSignIn ? "Sign in" : "Sign up"}
+            </LoadingButton>
+
+            {isSignIn && (
+              <LoadingButton
+                type="button"
+                isLoading={isLoadingLoginGuest}
+                messageLoading="Loading..."
+                className="w-full transition-all duration-300 hover:brightness-110"
+                onClick={loginGuest}
+              >
+                Continue as Guest
+              </LoadingButton>
+            )}
+          </div>
         </form>
       </Form>
 

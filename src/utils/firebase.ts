@@ -47,14 +47,38 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
+// const uploadToImgBB = async (file: File) => {
+//   const apiKey = import.meta.env.VITE_IMGBB_API_KEY;
+//   const formData = new FormData();
+//   formData.append("image", file);
+
+//   try {
+//     const { data } = await axios.post(
+//       `https://api.imgbb.com/1/upload?key=${apiKey}`,
+//       formData,
+//       {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//         },
+//       }
+//     );
+//     return {
+//       url: data.data.url,
+//       id: data.data.id,
+//     };
+//   } catch (error) {
+//     console.error("Error uploading image to ImgBB:", error);
+//     throw error;
+//   }
+// };
+
 const uploadToImgBB = async (file: File) => {
-  const apiKey = import.meta.env.VITE_IMGBB_API_KEY;
   const formData = new FormData();
   formData.append("image", file);
 
   try {
     const { data } = await axios.post(
-      `https://api.imgbb.com/1/upload?key=${apiKey}`,
+      "/.netlify/functions/uploadImages",
       formData,
       {
         headers: {
@@ -63,8 +87,8 @@ const uploadToImgBB = async (file: File) => {
       }
     );
     return {
-      url: data.data.url,
-      id: data.data.id,
+      url: data.url,
+      id: data.id,
     };
   } catch (error) {
     console.error("Error uploading image to ImgBB:", error);
@@ -101,9 +125,9 @@ export const registerUserWithImage = async (
       friends: [],
     });
 
-    console.log(
-      "User registered with image and related contacts collection created 🚀"
-    );
+    // console.log(
+    //   "User registered with image and related contacts collection created 🚀"
+    // );
   } catch (error: any) {
     console.error("Error registering user or uploading image:", error);
     const errorCode = error?.code;
@@ -157,7 +181,7 @@ export const createPost = async (postData: CreatePost) => {
       comments: [],
       datePost: Date.now(),
     });
-    console.log("post created 📄");
+    // console.log("post created 📄");
   } catch (error) {
     console.error(error);
     toast.error("The post cannot be created, please try again.");
@@ -168,12 +192,11 @@ export const createPost = async (postData: CreatePost) => {
 export const loginUser = async (
   email: string,
   password: string,
-
   form: UseFormReturn<FormValues, any, undefined>
 ) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    console.log("User logged in");
+    // console.log("User logged in");
   } catch (error: any) {
     console.error("Error logging in:", error);
     const errorCode = error?.code;
@@ -211,14 +234,14 @@ export const loginUser = async (
 export const logoutUser = async () => {
   try {
     await signOut(auth);
-    console.log("User logged out");
+    // console.log("User logged out");
   } catch (error) {
     console.error("Error logging out:", error);
   }
 };
 
 export const fetchUserById = async (id: string) => {
-  console.log("Running fetch user by id: ", id);
+  // console.log("Running fetch user by id: ", id);
   try {
     const userDocRef = doc(db, "usersWolfstream", id);
     const userDoc = await getDoc(userDocRef);
@@ -227,8 +250,7 @@ export const fetchUserById = async (id: string) => {
       const user: unknown = { id: userDoc.id, ...userDoc.data() };
       return user as User;
     } else {
-      console.log("No such document!");
-      return null;
+      throw new Error("user not found");
     }
   } catch (error) {
     console.error("Error fetching user document:", error);
@@ -314,7 +336,7 @@ export const fetchAllPosts = async () => {
 export const subscribeToAllPosts = (
   onUpdate: (posts: Post[], snapshot: any) => void
 ): (() => void) => {
-  console.log("running sucribe to all posts");
+  // console.log("running sucribe to all posts");
 
   const q = query(
     collection(db, "postsWolfstream"),
@@ -339,7 +361,7 @@ export const subscribeToUserPosts = (
   userId: string,
   onUpdate: (posts: Post[], snapshot: any) => void
 ): (() => void) => {
-  console.log("running sucribe to users posts");
+  // console.log("running sucribe to users posts");
 
   const q = query(
     collection(db, "postsWolfstream"),

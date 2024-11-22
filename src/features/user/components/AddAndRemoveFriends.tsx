@@ -54,12 +54,12 @@ const AddAndRemoveFriends = ({ isMyFriend, friendId }: Props) => {
   };
 
   return (
-    <IconContext.Provider value={{ className: "text-cyan-500" }}>
+    <>
       {isMyFriend ? (
         <Button
-          variant={"ghost"}
+          variant="secondary"
           size="icon"
-          className="rounded-full bg-cyan-100"
+          className="rounded-full"
           onClick={() => removeFriend(friendId)}
           disabled={isLoading}
         >
@@ -67,16 +67,16 @@ const AddAndRemoveFriends = ({ isMyFriend, friendId }: Props) => {
         </Button>
       ) : (
         <Button
-          variant={"ghost"}
+          variant="secondary"
           size="icon"
-          className="rounded-full bg-cyan-100"
+          className="rounded-full"
           onClick={() => addFriend(friendId)}
           disabled={isLoading}
         >
           <TiUserAddOutline />
         </Button>
       )}
-    </IconContext.Provider>
+    </>
   );
 };
 

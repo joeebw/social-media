@@ -27,21 +27,10 @@ const Posts = () => {
     }
   }, [inView, isLoadingMore, hasMore]);
 
-  const rootStyles = getComputedStyle(document.documentElement);
-  const primaryColor = rootStyles.getPropertyValue("--primary-color").trim();
-
-  if (isLoading) {
+  if (isLoading || !posts) {
     return (
       <div className="flex justify-center">
-        <PropagateLoader color={primaryColor} className="mt-14" />;
-      </div>
-    );
-  }
-
-  if (!posts && !isLoading) {
-    return (
-      <div className="flex justify-center mt-8 text-gray-500">
-        No hay posts disponibles
+        <PropagateLoader className="mt-14" color={`hsl(var(--primary))`} />
       </div>
     );
   }
@@ -55,7 +44,11 @@ const Posts = () => {
       {hasMore && (
         <div ref={ref} className="flex justify-center py-4">
           {isLoadingMore && (
-            <PropagateLoader color={primaryColor} size={8} className="my-2" />
+            <PropagateLoader
+              color={`hsl(var(--primary))`}
+              size={8}
+              className="my-2"
+            />
           )}
         </div>
       )}

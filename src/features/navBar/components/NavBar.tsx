@@ -3,11 +3,12 @@ import { IconContext } from "react-icons/lib";
 import { IoMdSunny, IoMdNotifications } from "react-icons/io";
 import { MdMessage, MdNightlightRound } from "react-icons/md";
 import { FaQuestionCircle } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserSearchInput from "./UserSearchInput";
 import DropdownUser from "./DropdownUser";
 import { Link } from "react-router-dom";
 import MovileDrawer from "./MobileDrawer";
+import useAppStore from "@/state/useStore";
 
 const INCON_COMPONENTS = [
   {
@@ -25,10 +26,11 @@ const INCON_COMPONENTS = [
 ];
 
 const NavBar = () => {
-  const [isDayMode, setIsDayMode] = useState(true);
+  const isDarkMode = useAppStore((state) => state.isDarkMode);
+  const setIsDarkMode = useAppStore((state) => state.setIsDarkMode);
 
   return (
-    <nav className="flex items-center justify-center h-20 shadow-sm bg-secondaryBackground">
+    <nav className="flex items-center justify-center h-20 shadow-sm bg-card">
       <div className="flex items-center justify-between w-11/12 mx-auto xl:w-10/12">
         {/* title and search input */}
         <div className="flex items-center gap-8">
@@ -42,10 +44,10 @@ const NavBar = () => {
         <IconContext.Provider value={{ size: "1.3rem" }}>
           <div className="flex items-center gap-6">
             <div
-              className="hidden p-2 transition-all rounded-md cursor-pointer lg:block hover:bg-gray-300"
-              onClick={() => setIsDayMode(!isDayMode)}
+              className="hidden p-2 transition-all rounded-md cursor-pointer lg:block hover:bg-muted"
+              onClick={() => setIsDarkMode(!isDarkMode)}
             >
-              {isDayMode ? <IoMdSunny /> : <MdNightlightRound />}
+              {isDarkMode ? <MdNightlightRound /> : <IoMdSunny />}
             </div>
 
             {INCON_COMPONENTS.map((icon) => {
@@ -61,10 +63,18 @@ const NavBar = () => {
 
             <DropdownUser />
           </div>
-        </IconContext.Provider>
 
-        {/* Hamburger Menu Movile */}
-        <MovileDrawer />
+          {/* Hamburger Menu Movile */}
+          <div className="flex items-center gap-5 lg:hidden">
+            <div
+              className="p-2 transition-all rounded-md cursor-pointer hover:bg-muted"
+              onClick={() => setIsDarkMode(!isDarkMode)}
+            >
+              {isDarkMode ? <MdNightlightRound /> : <IoMdSunny />}
+            </div>
+            <MovileDrawer />
+          </div>
+        </IconContext.Provider>
       </div>
     </nav>
   );

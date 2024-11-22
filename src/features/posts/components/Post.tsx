@@ -78,7 +78,7 @@ const Post = ({ postItem }: Props) => {
   const isButtonDisabled = !watch("comment") || isSubmitting;
 
   return (
-    <Card className="w-full bg-secondaryBackground">
+    <Card className="w-full">
       <CardHeader className="flex flex-row items-center justify-between ">
         <div className="flex gap-4">
           <AvatarProfile
@@ -108,7 +108,7 @@ const Post = ({ postItem }: Props) => {
         )}
       </CardHeader>
       <CardContent className="px-0 sm:px-6">
-        <p className="px-4 text-base sm:px-6">{description}</p>
+        <p className="px-4 text-base sm:px-0">{description}</p>
 
         {picturePath && (
           <ImageWithSkeleton
@@ -126,7 +126,7 @@ const Post = ({ postItem }: Props) => {
           <Button
             variant="ghost"
             size="sm"
-            className="flex items-center gap-2 hover:bg-gray-200"
+            className="flex items-center gap-2 hover:bg-muted"
             onClick={() => setIsOpenComments(!isOpenComments)}
           >
             <MessageCircle className="w-5 h-5" />
@@ -157,7 +157,7 @@ const Post = ({ postItem }: Props) => {
                     <Input
                       {...register("comment")}
                       type="text"
-                      className="w-full sm:min-w-[20rem] sm:w-[55%] focus:ring-primary"
+                      className="w-full sm:min-w-[20rem] sm:w-[55%]"
                       placeholder="Comment..."
                     />
                     <Button size="sm" disabled={isButtonDisabled}>

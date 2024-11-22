@@ -9,6 +9,7 @@ type Props = {
   messageLoading: string;
   className?: string;
   type?: "submit" | "reset" | "button";
+  onClick?: () => void;
 };
 
 export default function LoadingButton({
@@ -17,12 +18,14 @@ export default function LoadingButton({
   messageLoading,
   className,
   type = "submit",
+  onClick,
 }: Props) {
   return (
     <Button
       type={type}
       className={clsx("w-full", className)}
       disabled={isLoading}
+      onClick={onClick}
     >
       {isLoading ? (
         <>

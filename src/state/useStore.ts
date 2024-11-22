@@ -6,9 +6,11 @@ interface SocialMediaState {
   isSignIn: boolean;
   user: User | null;
   idUser: string | null;
+  isDarkMode: boolean;
   toggleSignIn: () => void;
   setUser: (user: User | null) => void;
   setIdUser: (id: string | null) => void;
+  setIsDarkMode: (bool: boolean) => void;
   resetAppStore: () => void;
 }
 
@@ -16,9 +18,10 @@ const initialState = {
   user: null,
   isSignIn: true,
   idUser: null,
+  isDarkMode: localStorage.getItem("theme") === "dark",
 };
 
-const createActions: StateCreator<SocialMediaState, [], []> = (set) => ({
+const createActions: StateCreator<SocialMediaState, [], []> = (set, get) => ({
   ...initialState,
   toggleSignIn: () =>
     set((state) => {
@@ -30,7 +33,12 @@ const createActions: StateCreator<SocialMediaState, [], []> = (set) => ({
   setIdUser: (id: string | null) => {
     set(() => ({ idUser: id }));
   },
-  resetAppStore: () => set(() => initialState),
+  setIsDarkMode: (bool: boolean) => set(() => ({ isDarkMode: bool })),
+  resetAppStore: () =>
+    set(() => {
+      const resetState = { ...initialState, isDarkMode: get().isDarkMode };
+      return resetState;
+    }),
 });
 
 const useAppStore = create<SocialMediaState>()(

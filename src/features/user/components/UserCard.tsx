@@ -8,20 +8,28 @@ import { FaTwitter, FaLinkedin } from "react-icons/fa";
 import AvatarProfile from "@/components/AvatarProfile";
 import useGetUserData from "@/hooks/useGetUserData";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import UserProfileModal from "./UserProfileModal";
+import { useEffect } from "react";
 
 const UserCard = () => {
-  const { data: userData, isLoading } = useGetUserData();
+  const { data: userData, isLoading, isError } = useGetUserData();
   const { id } = useParams();
+  const navigate = useNavigate();
   const friends = userData?.friends;
   const name = userData ? `${userData.firstName} ${userData.lastName}` : "";
 
+  useEffect(() => {
+    if (isError) {
+      navigate("/not-found", { replace: true });
+    }
+  }, [isError]);
+
   return (
     <div>
-      <Card className="bg-secondaryBackground">
+      <Card>
         <IconContext.Provider value={{ size: "1.6rem" }}>
-          <CardContent className="pt-4 text-sm text-gray-500">
+          <CardContent className="pt-4 text-sm text-muted-foreground">
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex gap-4">
@@ -55,7 +63,7 @@ const UserCard = () => {
                         <h3 className="text-base font-bold xl:text-lg">
                           {name}
                         </h3>
-                        <span className="text-sm text-gray-400">
+                        <span className="text-sm text-muted-foreground">
                           {friends?.length === 0
                             ? "No Friends"
                             : friends?.length === 1
@@ -69,15 +77,15 @@ const UserCard = () => {
               </div>
 
               <IconContext.Provider value={{ size: "1.1rem" }}>
-                <RiUserSettingsLine className="text-gray-600 cursor-not-allowed" />
+                <RiUserSettingsLine className="cursor-not-allowed text-muted-foreground" />
               </IconContext.Provider>
             </div>
 
-            <Separator className="my-3 bg-gray-300" />
+            <Separator className="my-3" />
 
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-4">
-                <MdOutlineLocationOn className="text-gray-700" />
+                <MdOutlineLocationOn className="text-muted-foreground" />
                 {isLoading ? (
                   <Skeleton className="w-24 h-4" />
                 ) : (
@@ -85,7 +93,7 @@ const UserCard = () => {
                 )}
               </div>
               <div className="flex items-center gap-4">
-                <TbBriefcase2 className="text-gray-700" />
+                <TbBriefcase2 className="text-muted-foreground" />
                 {isLoading ? (
                   <Skeleton className="w-32 h-4" />
                 ) : (
@@ -94,48 +102,50 @@ const UserCard = () => {
               </div>
             </div>
 
-            <Separator className="my-3 bg-gray-300" />
+            <Separator className="my-3" />
 
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between gap-4">
                 <span>Who's viewed your profile</span>
-                <span className="font-medium text-gray-600">
+                <span className="font-medium text-muted-foreground">
                   {Math.floor(Math.random() * 1000) + 1}
                 </span>
               </div>
               <div className="flex items-center justify-between gap-4">
                 <span>Impressions of your post</span>
-                <span className="font-medium text-gray-600">
+                <span className="font-medium text-muted-foreground">
                   {Math.floor(Math.random() * 1000) + 1}
                 </span>
               </div>
             </div>
 
-            <Separator className="my-3 bg-gray-300" />
+            <Separator className="my-3" />
 
             <div>
-              <h4 className="font-medium text-gray-600">Social Profile</h4>
+              <h4 className="font-medium text-muted-foreground">
+                Social Profile
+              </h4>
 
               <div className="flex flex-col gap-3 mt-3">
                 <div className="flex items-center gap-3 text-sm">
-                  <FaTwitter className="text-gray-500" />
+                  <FaTwitter className="text-muted-foreground" />
                   <div className="flex justify-between flex-1">
                     <div className="flex flex-col">
                       <span className="font-bold">Twitter</span>
                       <span>Social Network</span>
                     </div>
-                    <MdOutlineEdit className="text-gray-600 cursor-not-allowed" />
+                    <MdOutlineEdit className="cursor-not-allowed text-muted-foreground" />
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3 text-sm">
-                  <FaLinkedin className="text-gray-500" />
+                  <FaLinkedin className="text-muted-foreground" />
                   <div className="flex justify-between flex-1">
                     <div className="flex flex-col">
                       <span className="font-bold">Twitter</span>
                       <span>Social Network</span>
                     </div>
-                    <MdOutlineEdit className="text-gray-600 cursor-not-allowed" />
+                    <MdOutlineEdit className="cursor-not-allowed text-muted-foreground" />
                   </div>
                 </div>
               </div>

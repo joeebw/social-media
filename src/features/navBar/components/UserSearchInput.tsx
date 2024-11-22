@@ -112,7 +112,7 @@ const UserSearchInput = ({ className }: Props) => {
     <div className={`w-full max-w-md ${className}`} ref={containerRef}>
       <div className="relative w-full lg:w-64">
         <Input
-          className="bg-gray-100 rounded-lg pr-9 focus:border-primary focus:ring-primary"
+          className="rounded-lg pr-9"
           type="text"
           placeholder="Search users..."
           value={searchTerm}
@@ -131,7 +131,7 @@ const UserSearchInput = ({ className }: Props) => {
         </IconContext.Provider>
 
         {showUserCards && (
-          <Card className="absolute top-11 -left-24 lg:left-0 max-h-[20rem] overflow-y-auto w-[20rem]  lg:w-96 shadow-lg bg-secondaryBackground z-20 overflow-x-hidden">
+          <Card className="absolute top-11 -left-24 lg:left-0 max-h-[20rem] overflow-y-auto w-[20rem]  lg:w-96 shadow-lg z-20 overflow-x-hidden">
             <CardHeader>
               <CardTitle>Filtered Users</CardTitle>
             </CardHeader>
@@ -147,8 +147,8 @@ const UserSearchInput = ({ className }: Props) => {
                     <li
                       key={user.id}
                       className={clsx(
-                        "flex items-center gap-4 p-2 rounded-md cursor-pointer hover:bg-gray-200",
-                        index === selectedIndex ? "bg-gray-200" : ""
+                        "flex items-center gap-4 p-2 rounded-md cursor-pointer hover:bg-muted",
+                        index === selectedIndex ? "bg-muted" : ""
                       )}
                       onClick={() => handleUserSelect(user)}
                     >

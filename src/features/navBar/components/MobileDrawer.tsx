@@ -15,7 +15,9 @@ const MovileDrawer = () => {
     <Sheet>
       <IconContext.Provider value={{ size: "1.3rem" }}>
         <SheetTrigger asChild className="cursor-pointer lg:hidden">
-          <RxHamburgerMenu />
+          <div>
+            <RxHamburgerMenu />
+          </div>
         </SheetTrigger>
       </IconContext.Provider>
       <SheetContent className="flex flex-col justify-between">

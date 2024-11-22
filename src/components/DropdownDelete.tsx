@@ -16,12 +16,15 @@ const DropdownDelete = ({ isLoading, onDelete }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild disabled={isLoading}>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" className="hover:bg-muted">
           <SlOptionsVertical />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem className="focus:bg-red-300" onClick={onDelete}>
+        <DropdownMenuItem
+          className="focus:text-destructive-foreground focus:bg-destructive"
+          onClick={onDelete}
+        >
           Remove
         </DropdownMenuItem>
       </DropdownMenuContent>

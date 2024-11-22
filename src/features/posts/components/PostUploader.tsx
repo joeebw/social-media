@@ -145,7 +145,7 @@ const PostUploader = () => {
   }, [isUploadImage]);
 
   return (
-    <Card className="bg-secondaryBackground">
+    <Card>
       <CardContent className="py-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -203,7 +203,7 @@ const PostUploader = () => {
                 </div>
               </div>
             )}
-            <Separator className="my-3 bg-gray-300" />
+            <Separator className="my-3" />
 
             <div className="flex items-center justify-between">
               {ICONS_UPLOADER.map(({ icon, name }) => {
@@ -211,7 +211,7 @@ const PostUploader = () => {
                   <div
                     className={clsx(
                       "flex items-center gap-2 p-2 font-medium transition",
-                      "cursor-pointer text-gray-500 rounded-md hover:bg-gray-200",
+                      "cursor-pointer text-muted-foreground rounded-md hover:bg-muted",
                       "text-sm xl:text-base"
                     )}
                     onClick={() => {
@@ -238,7 +238,7 @@ const PostUploader = () => {
                 );
               })}
               <Button
-                className="w-20 text-white"
+                className="w-20 "
                 disabled={
                   form.formState.isSubmitting ||
                   (id !== undefined && id !== myUserId)

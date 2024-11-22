@@ -67,6 +67,7 @@ const signUpDefaultValues = {
 
 const useAuth = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isLoadingLoginGuest, setIsloadingLoginGuest] = useState(false);
   const isSignIn = useAppStore((state) => state.isSignIn);
   const navigate = useNavigate();
 
@@ -107,6 +108,18 @@ const useAuth = () => {
     }
   };
 
+  const loginGuest = async () => {
+    try {
+      setIsloadingLoginGuest(true);
+      await loginUserWithEmail("test01@gmail.com", "wolves10!", form);
+      navigate("/home");
+    } catch (error) {
+      console.error("Error in login user");
+    } finally {
+      setIsloadingLoginGuest(false);
+    }
+  };
+
   const handleSubmit = async (data: LoginFormValues | RegisterFormValues) => {
     if (isSignIn) {
       const loginData = data as LoginFormValues;
@@ -126,7 +139,14 @@ const useAuth = () => {
     }
   }, [isSignIn, form]);
 
-  return { form, handleFileSelect, handleSubmit, selectedFile };
+  return {
+    form,
+    handleFileSelect,
+    handleSubmit,
+    selectedFile,
+    loginGuest,
+    isLoadingLoginGuest,
+  };
 };
 
 export default useAuth;

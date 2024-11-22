@@ -8,7 +8,7 @@ const HomePage = () => {
     <div className="flex flex-col w-full min-h-screen pb-12">
       <NavBar />
 
-      <div className="flex flex-col flex-1 w-11/12 gap-8 mx-auto sm:w-5/6 lg:gap-0 lg:w-full lg:grid lg:grid-cols-8 lg:px-6 2xl:px-20 mt-7">
+      <div className="flex flex-col flex-1 w-full gap-8 mx-auto sm:w-5/6 lg:gap-0 lg:w-full lg:grid lg:grid-cols-8 lg:px-6 2xl:px-20 mt-7">
         <div className="lg:col-span-2 lg:pr-2 2xl:pr-5">
           <UserCard />
         </div>

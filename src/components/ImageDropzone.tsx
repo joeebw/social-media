@@ -29,7 +29,7 @@ const ImageDropzone = ({
   });
 
   return (
-    <div className="p-2 border border-gray-300">
+    <div className="p-2 border-2">
       <div
         {...getRootProps()}
         className={clsx(

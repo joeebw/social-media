@@ -8,9 +8,11 @@ import RedirectIfAuthenticated from "./components/RedirectIfAuthenticated";
 import useAuthStateChanged from "./hooks/useAuthStateChanged";
 import ProfilePage from "./pages/ProfilePage";
 import ScrollToTop from "./components/ScrollToTop";
+import useDarkMode from "./hooks/useDarkMode";
 
 const App = () => {
   useAuthStateChanged();
+  useDarkMode();
 
   return (
     <>

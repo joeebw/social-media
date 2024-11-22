@@ -100,10 +100,8 @@ export const useRealtimePosts = (userId?: string) => {
       })) as Post[];
 
       if (newPosts.length > 0) {
-        const hasMorePosts = newPosts.length > POSTS_PER_PAGE;
-        const postsToAdd = hasMorePosts
-          ? newPosts.slice(0, POSTS_PER_PAGE)
-          : newPosts;
+        const hasMorePosts = newPosts.length > 0;
+        const postsToAdd = newPosts.slice(0, POSTS_PER_PAGE);
 
         const currentPosts = queryClient.getQueryData<Post[]>(queryKey) ?? [];
         const updatedPosts = [...currentPosts, ...postsToAdd];

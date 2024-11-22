@@ -18,13 +18,13 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
           <App />
-        </BrowserRouter>
-        <ReactQueryDevtools />
-      </QueryClientProvider>
-    </ErrorBoundary>
+        </ErrorBoundary>
+      </BrowserRouter>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   </StrictMode>
 );

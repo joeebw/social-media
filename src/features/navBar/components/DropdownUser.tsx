@@ -21,15 +21,15 @@ const DropdownUser = () => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="hidden lg:block min-w-[5rem] font-normal rounded-md bg-gray-200"
+          className="hidden lg:block min-w-[5rem] font-normal rounded-md bg-muted"
         >
           {name}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-white">
+      <DropdownMenuContent>
         <DropdownMenuGroup>
           <DropdownMenuItem
-            className="font-medium focus:bg-red-300"
+            className="font-medium focus:text-destructive-foreground focus:bg-destructive"
             onClick={handleLogout}
           >
             Logout

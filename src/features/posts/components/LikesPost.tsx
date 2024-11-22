@@ -37,7 +37,7 @@ const LikesPost = ({ likes, postId }: Props) => {
       disabled={isLoading}
       variant="ghost"
       size="sm"
-      className="flex items-center gap-2 hover:bg-gray-200"
+      className="flex items-center gap-2 hover:bg-muted"
       onClick={handleAddAndRemoveLikes}
     >
       <Heart className="w-5 h-5" />

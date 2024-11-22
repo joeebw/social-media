@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 
 const HighlightTitle = ({ children, ...rest }: { children: ReactNode }) => {
   const pathName = useLocation().pathname;
-  console.log("pathName: ", pathName);
 
   return (
     <h1
