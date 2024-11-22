@@ -3,7 +3,6 @@ import { IconContext } from "react-icons/lib";
 import { IoMdSunny, IoMdNotifications } from "react-icons/io";
 import { MdMessage, MdNightlightRound } from "react-icons/md";
 import { FaQuestionCircle } from "react-icons/fa";
-import { useEffect, useState } from "react";
 import UserSearchInput from "./UserSearchInput";
 import DropdownUser from "./DropdownUser";
 import { Link } from "react-router-dom";
