@@ -11,8 +11,10 @@ import ScrollToTop from "./components/ScrollToTop";
 import useDarkMode from "./hooks/useDarkMode";
 
 const App = () => {
-  useAuthStateChanged();
+  const { isLoading } = useAuthStateChanged();
   useDarkMode();
+
+  if (isLoading) return null;
 
   return (
     <>
