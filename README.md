@@ -1,50 +1,59 @@
-# React + TypeScript + Vite
+# **Wolfstream**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## **Overview**
 
-Currently, two official plugins are available:
+**Wolfstream** is a social network where users can share posts, like and comment on content, manage their profiles, and connect with others. It was developed as a portfolio project and is fully functional, with minor improvements planned over time.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## **Project Status**
 
-## Expanding the ESLint configuration
+Wolfstream is a **portfolio project** and is currently complete, with only minor adjustments being made.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## **Technology Stack**
 
-- Configure the top-level `parserOptions` property like this:
+- **Frontend:** React with TypeScript
+- **State Management:** Zustand
+- **Database & Authentication:** Firebase
+- **Data Fetching & Caching:** React Query
+- **Styling:** Tailwind CSS and shadcn/UI
+- **Deployment:** Netlify
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## **Key Features**
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- **Post Creation:** Users can publish text and photo posts.
+- **Engagement:** Like and comment on posts.
+- **Profile Management:** Users have personal profiles, can upload profile pictures, and search for other profiles.
+- **Content Control:** Users can delete their own posts.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## **Installation & Setup**
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+To run Wolfstream locally, follow these steps:
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/joeebw/social-media.git
+   cd wolfstream
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Start the development server:
+   ```sh
+   npm run dev
+   ```
+4. Build the project:
+   ```sh
+   npm run build
+   ```
+
+## **Deployment**
+
+Wolfstream is deployed on **Netlify**.
+
+## **CI/CD**
+
+It is unclear whether Netlify provides an automated CI/CD pipeline for this project.
+
+## **Contributing**
+
+Wolfstream is **not open for contributions**, but since it is licensed under **MIT**, users are free to fork the project if they wish.
