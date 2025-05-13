@@ -8,6 +8,7 @@ import { z } from "zod";
 import useAppStore from "@/state/useStore";
 import { loginUser as loginUserWithEmail } from "@/utils/firebase";
 import { useNavigate } from "react-router-dom";
+import authService from "@/features/auth/services/authService";
 
 const passwordSchema = z
   .string()
@@ -69,6 +70,7 @@ const useAuth = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoadingLoginGuest, setIsloadingLoginGuest] = useState(false);
   const isSignIn = useAppStore((state) => state.isSignIn);
+  const setUserId = useAppStore((state) => state.setIdUser);
   const navigate = useNavigate();
 
   const form = useForm<FormValues>({
@@ -96,6 +98,15 @@ const useAuth = () => {
       location: data.location,
       occupation: data.occupation,
     };
+
+    const userId = await authService.register({
+      ...userData,
+      profilePicture: data.profilePicture,
+    });
+
+    setUserId(userId);
+
+    // ! When api register is tested I needs to delete this
     await registerUserWithImage(userData, data.profilePicture);
   };
 

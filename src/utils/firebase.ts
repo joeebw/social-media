@@ -47,38 +47,14 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-// const uploadToImgBB = async (file: File) => {
-//   const apiKey = import.meta.env.VITE_IMGBB_API_KEY;
-//   const formData = new FormData();
-//   formData.append("image", file);
-
-//   try {
-//     const { data } = await axios.post(
-//       `https://api.imgbb.com/1/upload?key=${apiKey}`,
-//       formData,
-//       {
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//         },
-//       }
-//     );
-//     return {
-//       url: data.data.url,
-//       id: data.data.id,
-//     };
-//   } catch (error) {
-//     console.error("Error uploading image to ImgBB:", error);
-//     throw error;
-//   }
-// };
-
 const uploadToImgBB = async (file: File) => {
+  const apiKey = import.meta.env.VITE_IMGBB_API_KEY;
   const formData = new FormData();
   formData.append("image", file);
 
   try {
     const { data } = await axios.post(
-      "/.netlify/functions/uploadImages",
+      `https://api.imgbb.com/1/upload?key=${apiKey}`,
       formData,
       {
         headers: {
@@ -87,14 +63,38 @@ const uploadToImgBB = async (file: File) => {
       }
     );
     return {
-      url: data.url,
-      id: data.id,
+      url: data.data.url,
+      id: data.data.id,
     };
   } catch (error) {
     console.error("Error uploading image to ImgBB:", error);
     throw error;
   }
 };
+
+// const uploadToImgBB = async (file: File) => {
+//   const formData = new FormData();
+//   formData.append("image", file);
+
+//   try {
+//     const { data } = await axios.post(
+//       "/.netlify/functions/uploadImages",
+//       formData,
+//       {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//         },
+//       }
+//     );
+//     return {
+//       url: data.url,
+//       id: data.id,
+//     };
+//   } catch (error) {
+//     console.error("Error uploading image to ImgBB:", error);
+//     throw error;
+//   }
+// };
 
 export const registerUserWithImage = async (
   userData: UserDataRegister,
