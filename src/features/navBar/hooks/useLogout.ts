@@ -1,5 +1,4 @@
 import useAppStore from "@/state/useStore";
-import { logoutUser } from "@/utils/firebase";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -11,8 +10,6 @@ const useLogout = () => {
   const handleLogout = async () => {
     resetAppStore();
     queryClient.clear();
-    await logoutUser();
-
     localStorage.removeItem("token");
     setUserId(null);
     navigate("/", { replace: true });

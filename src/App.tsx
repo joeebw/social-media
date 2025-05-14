@@ -5,16 +5,15 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "sonner";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RedirectIfAuthenticated from "./components/RedirectIfAuthenticated";
-import useAuthStateChanged from "./hooks/useAuthStateChanged";
 import ProfilePage from "./pages/ProfilePage";
 import ScrollToTop from "./components/ScrollToTop";
 import useDarkMode from "./hooks/useDarkMode";
 
 const App = () => {
-  const { isLoading } = useAuthStateChanged();
+  // const { isLoading } = useAuthStateChanged();
   useDarkMode();
 
-  if (isLoading) return null;
+  // if (isLoading) return null;
 
   return (
     <>

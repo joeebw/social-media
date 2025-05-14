@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { registerUserWithImage } from "@/utils/firebase";
 import { UserDataRegister } from "@/ts/firebase.types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +8,9 @@ import useAppStore from "@/state/useStore";
 import { loginUser as loginUserWithEmail } from "@/utils/firebase";
 import { useNavigate } from "react-router-dom";
 import authService from "@/features/auth/services/authService";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import getErrorMessage from "@/utils/errorMessage";
 
 const passwordSchema = z
   .string()
@@ -99,23 +101,33 @@ const useAuth = () => {
       occupation: data.occupation,
     };
 
-    const userId = await authService.register({
-      ...userData,
-      profilePicture: data.profilePicture,
-    });
+    try {
+      const userId = await authService.register({
+        ...userData,
+        profilePicture: data.profilePicture,
+      });
 
-    setUserId(userId);
+      setUserId(userId);
+      navigate("/home");
+    } catch (error) {
+      const errorMessage = getErrorMessage(error);
 
-    // ! When api register is tested I needs to delete this
-    await registerUserWithImage(userData, data.profilePicture);
+      toast.error(errorMessage);
+    }
   };
 
   const loginUser = async (data: LoginFormValues) => {
     try {
-      await loginUserWithEmail(data.email, data.password, form);
+      const userId = await authService.login({
+        email: data.email,
+        password: data.password,
+      });
+      setUserId(userId);
       navigate("/home");
     } catch (error) {
-      console.error("Error in login user");
+      const errorMessage = getErrorMessage(error);
+
+      toast.error(errorMessage);
     }
   };
 
@@ -126,6 +138,9 @@ const useAuth = () => {
       navigate("/home");
     } catch (error) {
       console.error("Error in login user");
+      const errorMessage = getErrorMessage(error);
+
+      toast.error(errorMessage);
     } finally {
       setIsloadingLoginGuest(false);
     }

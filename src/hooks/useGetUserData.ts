@@ -1,7 +1,7 @@
 import useAppStore from "@/state/useStore";
-import { fetchUserById } from "@/utils/firebase";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import userService from "@/features/user/services/userService";
 
 const useGetUserData = (forceMyUser?: boolean) => {
   const { id } = useParams();
@@ -11,7 +11,7 @@ const useGetUserData = (forceMyUser?: boolean) => {
 
   return useQuery({
     queryKey: ["user", targetId],
-    queryFn: () => fetchUserById(targetId as string),
+    queryFn: () => userService.fetchUserById(),
     enabled: !!targetId,
   });
 };
