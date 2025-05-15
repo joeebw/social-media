@@ -1,13 +1,10 @@
-import { fetchUserList } from "@/utils/firebase";
+import { User } from "@/state/userStore.type";
+import api from "@/utils/api";
 
-const fetchUsers = async () => {
-  const userList = await fetchUserList();
+const fetchUsers = async (): Promise<User[]> => {
+  const userList = await api.get("/user/all");
 
-  if (!userList) {
-    throw new Error("userList not found");
-  }
-
-  return userList;
+  return userList.data;
 };
 
 export default {

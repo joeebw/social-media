@@ -7,6 +7,11 @@ const fetchUserById = async (): Promise<User> => {
   return user.data;
 };
 
+const addFriendBydId = async (idFriend: string) => {
+  await api.post(`/user/me-friends/${idFriend}`);
+};
+
 export default {
   fetchUserById,
+  addFriendBydId,
 };
