@@ -13,7 +13,12 @@ const fetchFeedPosts = async (): Promise<Post[]> => {
   return posts.data;
 };
 
+const addAndRemoveLike = async (idPost: string) => {
+  await api.post(`/like/${idPost}`);
+};
+
 export default {
   fetchFeedPosts,
   fetchUserPosts,
+  addAndRemoveLike,
 };

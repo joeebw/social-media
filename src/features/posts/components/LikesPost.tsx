@@ -1,9 +1,6 @@
 import { Button } from "@/components/ui/button";
-import useAppStore from "@/state/useStore";
-import { updatePostLikes } from "@/utils/firebase";
+import useLikeActions from "@/features/posts/hooks/useLikeActions";
 import { Heart } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
 
 type Props = {
   likes: number;
@@ -11,25 +8,10 @@ type Props = {
 };
 
 const LikesPost = ({ likes, postId }: Props) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const userId = useAppStore((state) => state.idUser);
+  const { addAndRemoveLike, isLoading } = useLikeActions();
 
   const handleAddAndRemoveLikes = async () => {
-    try {
-      setIsLoading(true);
-      let updatedLikes: string[];
-      if (likes.includes(userId as string)) {
-        updatedLikes = likes.filter((id) => id !== userId);
-      } else {
-        updatedLikes = [...likes, userId as string];
-      }
-
-      await updatePostLikes(postId, updatedLikes);
-    } catch (error) {
-      toast.error("Oops! Likes can not be updated, please try again");
-    } finally {
-      setIsLoading(false);
-    }
+    await addAndRemoveLike(postId);
   };
 
   return (
