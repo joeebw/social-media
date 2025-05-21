@@ -30,10 +30,7 @@ const usePostActions = (comments: Comment[]) => {
 
   const handleDeleteComment = async (idComment: string, postId: string) => {
     try {
-      const filteredComments = comments.filter(
-        (comment) => comment.id !== idComment
-      );
-      await updatePostComments(postId, filteredComments);
+      await postService.deleteComment(idComment, postId);
     } catch (error) {
       toast.error("Oops! The comment cannot be deleted, please try again");
     }

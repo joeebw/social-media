@@ -68,15 +68,12 @@ const Post = ({ postItem }: Props) => {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<CommentFormValues>({
     resolver: zodResolver(commentSchema),
     mode: "onSubmit",
   });
-
-  const isButtonDisabled = !watch("comment") || isSubmitting;
 
   return (
     <Card className="w-full">
@@ -185,14 +182,16 @@ const Post = ({ postItem }: Props) => {
                         />
                         <p>{comment.comment}</p>
                       </div>
-                      <Button variant="ghost" size="icon">
-                        <DropdownDelete
-                          isLoading={false}
-                          onDelete={() =>
-                            handleDeleteComment(comment.id, postItem.id)
-                          }
-                        />
-                      </Button>
+                      {comment.userId === myUser?.id && (
+                        <Button variant="ghost" size="icon">
+                          <DropdownDelete
+                            isLoading={false}
+                            onDelete={() =>
+                              handleDeleteComment(comment.id, postItem.id)
+                            }
+                          />
+                        </Button>
+                      )}
                     </div>
                     {comments.length > 1 && <Separator className="my-1" />}
                   </div>

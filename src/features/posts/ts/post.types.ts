@@ -4,4 +4,5 @@ export type Comment = {
   firstName: string;
   lastName: string;
   profilePicture: string;
+  userId: string;
 };
