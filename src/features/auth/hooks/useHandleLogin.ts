@@ -9,7 +9,6 @@ import { loginUser as loginUserWithEmail } from "@/utils/firebase";
 import { useNavigate } from "react-router-dom";
 import authService from "@/features/auth/services/authService";
 import { toast } from "sonner";
-import { AxiosError } from "axios";
 import getErrorMessage from "@/utils/errorMessage";
 
 const passwordSchema = z

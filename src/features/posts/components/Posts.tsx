@@ -10,22 +10,24 @@ const Posts = () => {
   const {
     data: posts,
     isLoading,
-    loadMorePosts,
-    hasMore,
-    isLoadingMore,
+    // loadMorePosts,
+    // hasMore,
+    // isLoadingMore,
   } = useRealtimePosts(id);
 
-  const { ref, inView } = useInView({
-    threshold: 0,
+  // * The next code is to load more posts on scroll, I will implement it later
 
-    rootMargin: "100px",
-  });
+  // const { ref, inView } = useInView({
+  //   threshold: 0,
 
-  useEffect(() => {
-    if (inView && !isLoadingMore && hasMore) {
-      loadMorePosts();
-    }
-  }, [inView, isLoadingMore, hasMore]);
+  //   rootMargin: "100px",
+  // });
+
+  // useEffect(() => {
+  //   if (inView && !isLoadingMore && hasMore) {
+  //     loadMorePosts();
+  //   }
+  // }, [inView, isLoadingMore, hasMore]);
 
   if (isLoading || !posts) {
     return (
@@ -41,7 +43,7 @@ const Posts = () => {
         <Post postItem={post} key={post.id} />
       ))}
 
-      {hasMore && (
+      {/* {hasMore && (
         <div ref={ref} className="flex justify-center py-4">
           {isLoadingMore && (
             <PropagateLoader
@@ -51,7 +53,7 @@ const Posts = () => {
             />
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

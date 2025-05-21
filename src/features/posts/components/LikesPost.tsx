@@ -6,7 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
-  likes: string[];
+  likes: number;
   postId: string;
 };
 
@@ -43,11 +43,7 @@ const LikesPost = ({ likes, postId }: Props) => {
       <Heart className="w-5 h-5" />
       <span>
         {" "}
-        {likes.length === 0
-          ? "No likes"
-          : likes.length === 1
-          ? "1 like"
-          : `${likes.length} likes`}
+        {likes === 0 ? "No likes" : likes === 1 ? "1 like" : `${likes} likes`}
       </span>
     </Button>
   );
