@@ -5,6 +5,7 @@ import { CommentFormValues } from "../components/Post";
 import { UseFormReset } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import postService from "@/features/posts/services/postService";
 
 const usePostActions = (comments: Comment[]) => {
   const navigate = useNavigate();
@@ -44,8 +45,7 @@ const usePostActions = (comments: Comment[]) => {
     reset: UseFormReset<CommentFormValues>
   ) => {
     try {
-      const newComments = [{ id: uuidv4(), text: data.comment }, ...comments];
-      await updatePostComments(postId, newComments);
+      await postService.createComment(data, postId);
       reset();
     } catch (error) {
       toast.error("Oops! The comment cannot be created, please try again");

@@ -1,3 +1,4 @@
+import { CommentFormValues } from "@/features/posts/components/Post";
 import { Post } from "@/ts/post.types";
 import api from "@/utils/api";
 
@@ -17,8 +18,13 @@ const addAndRemoveLike = async (idPost: string) => {
   await api.post(`/like/${idPost}`);
 };
 
+const createComment = async (data: CommentFormValues, postId: string) => {
+  await api.post(`/comment/${postId}`, { comment: data.comment });
+};
+
 export default {
   fetchFeedPosts,
   fetchUserPosts,
   addAndRemoveLike,
+  createComment,
 };

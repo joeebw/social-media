@@ -1,4 +1,7 @@
 export type Comment = {
   id: string;
-  text: string;
+  comment: string;
+  firstName: string;
+  lastName: string;
+  profilePicture: string;
 };

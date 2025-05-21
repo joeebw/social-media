@@ -6,7 +6,7 @@ import clsx from "clsx";
 type Props = {
   children: ReactNode;
   isLoading: boolean;
-  messageLoading: string;
+  messageLoading?: string;
   className?: string;
   type?: "submit" | "reset" | "button";
   onClick?: () => void;
