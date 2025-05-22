@@ -1,19 +1,22 @@
 import { CommentFormValues } from "@/features/posts/components/Post";
 import { CreatePostRequest } from "@/features/posts/ts/post.types";
+import { formatPost } from "@/features/posts/utils/formatPost";
 import imageService from "@/shared/services/imageService";
 import { CreatePost, Post } from "@/ts/post.types";
 import api from "@/utils/api";
 
 const fetchUserPosts = async (userId: string): Promise<Post[]> => {
-  const posts = await api.get(`/post/user/${userId}`);
+  const posts = await api.get<Post[]>(`/post/user/${userId}`);
+  const formattedPosts = formatPost(posts.data);
 
-  return posts.data;
+  return formattedPosts;
 };
 
 const fetchFeedPosts = async (): Promise<Post[]> => {
   const posts = await api.get<Post[]>("/post/");
+  const formattedPosts = formatPost(posts.data);
 
-  return posts.data;
+  return formattedPosts;
 };
 
 const createPost = async (data: CreatePost) => {
@@ -35,6 +38,10 @@ const createPost = async (data: CreatePost) => {
   await api.post("/post", post);
 };
 
+const removePost = async (idPost: string) => {
+  await api.delete(`/post/${idPost}`);
+};
+
 const addAndRemoveLike = async (idPost: string) => {
   await api.post(`/like/${idPost}`);
 };
@@ -54,4 +61,5 @@ export default {
   createComment,
   deleteComment,
   createPost,
+  removePost,
 };
