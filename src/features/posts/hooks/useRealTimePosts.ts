@@ -138,6 +138,7 @@ export const useRealtimePosts = (userId?: string) => {
       return posts;
     } catch (error) {
       toast.error("Oops! Something went wrong, please try again");
+
       throw error;
     }
   };
@@ -168,15 +169,28 @@ export const useRealtimePosts = (userId?: string) => {
     socket.on("postDeleted", onPostDeleted);
   }, []);
 
-  const reactQuery = useQuery<Post[]>({
-    queryKey,
-    queryFn: getFeedAndUserPosts,
+  const feedQuery = useQuery<Post[]>({
+    queryKey: ["home posts"],
+    queryFn: postService.fetchFeedPosts,
+    enabled: !isUserPosts, // Solo se ejecuta si no es una consulta de usuario
   });
 
-  return {
-    ...reactQuery,
-    // loadMorePosts,
-    hasMore,
-    isLoadingMore,
-  };
+  // Query para los posts del usuario
+  const userPostsQuery = useQuery<Post[]>({
+    queryKey: ["user posts", userId],
+    queryFn: () => postService.fetchUserPosts(userId!),
+    enabled: isUserPosts && userId !== undefined, // Solo se ejecuta si es una consulta de usuario
+  });
+
+  return isUserPosts
+    ? {
+        ...userPostsQuery,
+        hasMore: false,
+        isLoadingMore: false,
+      }
+    : {
+        ...feedQuery,
+        hasMore: false,
+        isLoadingMore: false,
+      };
 };
