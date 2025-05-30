@@ -6,14 +6,8 @@ import { CreatePost, Post } from "@/ts/post.types";
 import api from "@/utils/api";
 
 const fetchUserPosts = async (userId: string): Promise<Post[]> => {
-  console.log("running fetch user posts: ", userId);
   try {
     const postsResponse = await api.get<Post[]>(`/post/user/${userId}`);
-
-    // ¡AÑADE ESTE LOG CLAVE!
-    console.log("Raw posts.data from API:", postsResponse.data);
-    console.log("Type of posts.data:", typeof postsResponse.data);
-    console.log("Is posts.data an array?", Array.isArray(postsResponse.data));
 
     // Asegúrate de que postsResponse.data es un array antes de pasarlo a formatPost
     // Si postsResponse.data puede ser null/undefined/no-array, maneja el caso
@@ -29,8 +23,6 @@ const fetchUserPosts = async (userId: string): Promise<Post[]> => {
     // Debería ser 'formatUserPostsForResponse' según nuestro último Canvas.
     const formattedPosts = formatPost(postsResponse.data);
 
-    console.log("formattedPosts: ", formattedPosts);
-
     return formattedPosts;
   } catch (error) {
     console.error("Error in fetchUserPosts:", error);
@@ -39,7 +31,6 @@ const fetchUserPosts = async (userId: string): Promise<Post[]> => {
 };
 
 const fetchFeedPosts = async (): Promise<Post[]> => {
-  console.log("running fetch feed posts");
   const posts = await api.get<Post[]>("/post/");
   const formattedPosts = formatPost(posts.data);
 

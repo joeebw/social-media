@@ -1,8 +1,8 @@
 import { User } from "@/state/userStore.type";
 import api from "@/utils/api";
 
-const fetchUserById = async (): Promise<User> => {
-  const user = await api.get(`/user/me`);
+const fetchUserById = async (id: string): Promise<User> => {
+  const user = await api.get(`/user/me/${id}`);
 
   return user.data;
 };

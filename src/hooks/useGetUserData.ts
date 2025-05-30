@@ -11,7 +11,7 @@ const useGetUserData = (forceMyUser?: boolean) => {
 
   return useQuery({
     queryKey: ["user", targetId],
-    queryFn: () => userService.fetchUserById(),
+    queryFn: () => userService.fetchUserById(targetId as string),
     enabled: !!targetId,
   });
 };

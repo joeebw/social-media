@@ -133,7 +133,8 @@ const useAuth = () => {
   const loginGuest = async () => {
     try {
       setIsloadingLoginGuest(true);
-      await loginUserWithEmail("test01@gmail.com", "wolves10!", form);
+      const userId = await authService.loginGuest();
+      setUserId(userId);
       navigate("/home");
     } catch (error) {
       console.error("Error in login user");

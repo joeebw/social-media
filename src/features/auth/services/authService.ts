@@ -42,4 +42,12 @@ const login = async ({
   return user.data.id.toString();
 };
 
-export default { register, login };
+const loginGuest = async () => {
+  const user = await api.post("/auth/login-guest");
+
+  localStorage.setItem("token", user.data.token);
+
+  return user.data.id.toString();
+};
+
+export default { register, login, loginGuest };

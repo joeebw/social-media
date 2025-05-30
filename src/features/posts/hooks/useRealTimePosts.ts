@@ -1,21 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
-import {
-  collection,
-  where,
-  orderBy,
-  limit,
-  startAfter,
-  getDocs,
-  DocumentSnapshot,
-  query,
-  QueryConstraint,
-} from "firebase/firestore";
-import {
-  db,
-  subscribeToAllPosts,
-  subscribeToUserPosts,
-} from "@/utils/firebase";
+import { DocumentSnapshot } from "firebase/firestore";
+
 import { Post } from "@/ts/post.types";
 import socket from "@/utils/socketService";
 import postService from "@/features/posts/services/postService";
