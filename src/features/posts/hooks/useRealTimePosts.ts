@@ -112,47 +112,43 @@ export const useRealtimePosts = (userId?: string) => {
 
   // New Posts version ------------------------------------------------------------
 
-  const getFeedAndUserPosts = async (): Promise<Post[]> => {
-    let posts: Post[];
-    try {
-      if (isUserPosts) {
-        posts = await postService.fetchUserPosts(userId);
-      } else {
-        posts = await postService.fetchFeedPosts();
-      }
-
-      return posts;
-    } catch (error) {
-      toast.error("Oops! Something went wrong, please try again");
-
-      throw error;
-    }
-  };
-
   useEffect(() => {
     if (!socket.connected) {
       socket.connect();
     }
 
     const onConnect = () => {
-      console.log("Socket connected");
       socket.emit("joinFeedRoom");
     };
 
     const onPostCreated = (postData: Post) => {
       console.log("Received postCreated event");
-      queryClient.invalidateQueries({ queryKey: ["home posts"] });
+      if (isUserPosts) {
+        queryClient.invalidateQueries({ queryKey: ["user posts", userId] });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["home posts"] });
+      }
     };
 
     const onPostDeleted = (postId: string) => {
       console.log("Received postDeleted event");
 
-      queryClient.invalidateQueries({ queryKey: ["home posts"] });
+      if (isUserPosts) {
+        queryClient.invalidateQueries({ queryKey: ["user posts", userId] });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["home posts"] });
+      }
     };
 
     socket.on("connect", onConnect);
     socket.on("postCreated", onPostCreated);
     socket.on("postDeleted", onPostDeleted);
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("postCreated", onPostCreated);
+      socket.off("postDeleted", onPostDeleted);
+    };
   }, []);
 
   const feedQuery = useQuery<Post[]>({
