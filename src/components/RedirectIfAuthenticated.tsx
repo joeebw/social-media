@@ -8,11 +8,16 @@ interface Props {
 }
 
 const RedirectIfAuthenticated = ({ children, redirectTo = "/home" }: Props) => {
-  const isAuthenticated = useAppStore((state) => state.idUser);
+  const token = localStorage.getItem("token");
+  // const isAuthenticated = useAppStore((state) => state.idUser);
 
-  if (isAuthenticated) {
+  if (token) {
     return <Navigate to={redirectTo} />;
   }
+
+  // if (isAuthenticated) {
+  //   return <Navigate to={redirectTo} />;
+  // }
 
   return children;
 };

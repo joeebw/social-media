@@ -21,7 +21,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { createPost } from "@/utils/firebase";
 import { CreatePost } from "@/ts/post.types";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -29,6 +28,7 @@ import useGetUserData from "@/hooks/useGetUserData";
 import { Link, useParams } from "react-router-dom";
 import useAppStore from "@/state/useStore";
 import useViewportBreakpoint from "@/hooks/useViewportBreakpoint";
+import useCreatePost from "@/features/posts/hooks/useCreatePost";
 
 const ICONS_UPLOADER = [
   {
@@ -83,6 +83,7 @@ const PostUploader = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { data: userData } = useGetUserData();
   const { id } = useParams();
+  const { createPost } = useCreatePost();
   const myUserId = useAppStore((state) => state.idUser);
   const xlSize = useViewportBreakpoint(1280);
 
@@ -104,23 +105,17 @@ const PostUploader = () => {
   };
 
   const handleSubmit = async (data: FormValues) => {
-    try {
-      const dataPost: CreatePost = {
-        userId: userData!.id!,
-        firstName: userData!.firstName,
-        lastName: userData!.lastName,
-        location: userData!.location,
-        profielPicture: userData?.profilePicture.url,
-        file: data.image,
-        description: data.text,
-      };
-      await createPost(dataPost);
-      // await new Promise((resolve) => setTimeout(resolve, 5000));
+    const dataPost: CreatePost = {
+      userId: userData!.id!,
+      firstName: userData!.firstName,
+      lastName: userData!.lastName,
+      location: userData!.location,
+      profielPicture: userData?.profilePicture.url,
+      file: data.image,
+      description: data.text,
+    };
 
-      toast.success("Your post has been successfully uploaded!");
-    } catch (error) {
-      console.error("error submit");
-    }
+    await createPost(dataPost);
 
     form.reset();
     setSelectedFile(null);
@@ -130,6 +125,7 @@ const PostUploader = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
+
       form.handleSubmit(handleSubmit)();
     }
   };

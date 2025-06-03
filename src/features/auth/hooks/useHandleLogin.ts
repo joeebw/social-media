@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { registerUserWithImage } from "@/utils/firebase";
 import { UserDataRegister } from "@/ts/firebase.types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +7,9 @@ import { z } from "zod";
 import useAppStore from "@/state/useStore";
 import { loginUser as loginUserWithEmail } from "@/utils/firebase";
 import { useNavigate } from "react-router-dom";
+import authService from "@/features/auth/services/authService";
+import { toast } from "sonner";
+import getErrorMessage from "@/utils/errorMessage";
 
 const passwordSchema = z
   .string()
@@ -69,6 +71,7 @@ const useAuth = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoadingLoginGuest, setIsloadingLoginGuest] = useState(false);
   const isSignIn = useAppStore((state) => state.isSignIn);
+  const setUserId = useAppStore((state) => state.setIdUser);
   const navigate = useNavigate();
 
   const form = useForm<FormValues>({
@@ -96,25 +99,48 @@ const useAuth = () => {
       location: data.location,
       occupation: data.occupation,
     };
-    await registerUserWithImage(userData, data.profilePicture);
+
+    try {
+      const userId = await authService.register({
+        ...userData,
+        profilePicture: data.profilePicture,
+      });
+
+      setUserId(userId);
+      navigate("/home");
+    } catch (error) {
+      const errorMessage = getErrorMessage(error);
+
+      toast.error(errorMessage);
+    }
   };
 
   const loginUser = async (data: LoginFormValues) => {
     try {
-      await loginUserWithEmail(data.email, data.password, form);
+      const userId = await authService.login({
+        email: data.email,
+        password: data.password,
+      });
+      setUserId(userId);
       navigate("/home");
     } catch (error) {
-      console.error("Error in login user");
+      const errorMessage = getErrorMessage(error);
+
+      toast.error(errorMessage);
     }
   };
 
   const loginGuest = async () => {
     try {
       setIsloadingLoginGuest(true);
-      await loginUserWithEmail("test01@gmail.com", "wolves10!", form);
+      const userId = await authService.loginGuest();
+      setUserId(userId);
       navigate("/home");
     } catch (error) {
       console.error("Error in login user");
+      const errorMessage = getErrorMessage(error);
+
+      toast.error(errorMessage);
     } finally {
       setIsloadingLoginGuest(false);
     }

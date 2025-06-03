@@ -12,15 +12,15 @@ export type CreatePost = {
 
 export type Post = {
   id: string;
-  comments: Comment[];
   datePost: number;
   description: string;
   firstName: string;
   lastName: string;
-  likes: string[];
   location: string;
   picturePath: string;
   userId: string;
   userPicturePath: string;
   pictureId: string;
+  likes: number;
+  comments: Comment[];
 };

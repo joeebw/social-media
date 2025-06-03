@@ -21,6 +21,7 @@ import ImageWithSkeleton from "@/components/ImageWithSkeleton";
 import LikesPost from "./LikesPost";
 import AddAndRemoveFriends from "@/features/user/components/AddAndRemoveFriends";
 import useGetUserData from "@/hooks/useGetUserData";
+import LoadingButton from "@/components/LoadingButton";
 
 type Props = {
   postItem: PostType;
@@ -67,15 +68,12 @@ const Post = ({ postItem }: Props) => {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<CommentFormValues>({
     resolver: zodResolver(commentSchema),
     mode: "onSubmit",
   });
-
-  const isButtonDisabled = !watch("comment") || isSubmitting;
 
   return (
     <Card className="w-full">
@@ -160,9 +158,9 @@ const Post = ({ postItem }: Props) => {
                       className="w-full sm:min-w-[20rem] sm:w-[55%]"
                       placeholder="Comment..."
                     />
-                    <Button size="sm" disabled={isButtonDisabled}>
+                    <LoadingButton isLoading={isSubmitting} className="w-fit">
                       Comment
-                    </Button>
+                    </LoadingButton>
                   </div>
                   {errors.comment && (
                     <span className="text-red-500">
@@ -178,15 +176,22 @@ const Post = ({ postItem }: Props) => {
                 {comments.map((comment) => (
                   <div key={comment.id}>
                     <div className="flex items-center justify-between">
-                      <p className="pl-4">{comment.text}</p>
-                      <Button variant="ghost" size="icon">
-                        <DropdownDelete
-                          isLoading={false}
-                          onDelete={() =>
-                            handleDeleteComment(comment.id, postItem.id)
-                          }
+                      <div className="flex items-center gap-3 pl-4">
+                        <AvatarProfile
+                          profilePicture={comment.profilePicture}
                         />
-                      </Button>
+                        <p>{comment.comment}</p>
+                      </div>
+                      {comment.userId === myUser?.id && (
+                        <Button variant="ghost" size="icon">
+                          <DropdownDelete
+                            isLoading={false}
+                            onDelete={() =>
+                              handleDeleteComment(comment.id, postItem.id)
+                            }
+                          />
+                        </Button>
+                      )}
                     </div>
                     {comments.length > 1 && <Separator className="my-1" />}
                   </div>
